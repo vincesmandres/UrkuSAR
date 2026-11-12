@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1.0.0",
+  "region": "Cotopaxi, Ecuador",
+  "observedAt": "2026-11-12T17:54:00Z",
+  "sources": {
+    "thermal": { "provider": "MODIS / VIIRS", "resolution": "1 km", "unit": "°C", "status": "fixture" },
+    "displacement": { "provider": "Sentinel-1 / InSAR", "resolution": "14 mm/px", "unit": "mm", "status": "fixture" }
+  },
+  "observations": [
+    { "zoneId": "Z-04", "date": "2026-11-12", "thermalAnomalyC": 4.8, "displacementMm": 18.4, "persistenceDays": 24, "confidence": 0.91 },
+    { "zoneId": "Z-02", "date": "2026-11-12", "thermalAnomalyC": 2.6, "displacementMm": 11.7, "persistenceDays": 17, "confidence": 0.84 },
+    { "zoneId": "Z-01", "date": "2026-11-12", "thermalAnomalyC": 1.1, "displacementMm": 6.2, "persistenceDays": 11, "confidence": 0.79 }
+  ]
+}

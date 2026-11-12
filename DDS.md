@@ -1,5 +1,5 @@
 # Driven-Development Specification (DDS)
-## GeoShift Analytics
+## UrkuSAR
 
 ### 1. Arquitectura del Sistema
 El sistema se diseña como un pipeline híbrido de alerta temprana que cruza dos vectores de datos satelitales para predecir inestabilidad estructural y geotécnica.
