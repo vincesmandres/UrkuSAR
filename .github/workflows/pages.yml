@@ -26,7 +26,15 @@ jobs:
       - run: npm test
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
-      - run: npm run build:pages
+      - run: npm run test:release
+      - name: Keep failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-diagnostics
+          path: test-results/
+          retention-days: 7
+          if-no-files-found: ignore
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

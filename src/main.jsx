@@ -172,7 +172,7 @@ function App() {
         <span className="edition">CUADERNO DE CAMPO / 01</span>
       </header>
 
-      <main id="contenido">
+      <main id="contenido" tabIndex={-1}>
         <section className="intro">
           <div>
             <p className="eyebrow">ECUADOR / OBSERVACIÓN DEL TERRITORIO</p>
@@ -608,7 +608,7 @@ function TerritoryMap({ zones, visible, selectedId, onSelect, layer }) {
             role="button"
             tabIndex={0}
             aria-pressed={selectedId === id}
-            aria-label={`Seleccionar ${properties.name}, índice ${number(properties.risk)}`}
+            aria-label={`Seleccionar ${properties.name}: ${id} ${number(value)} ${layer === 'risk' ? '/100' : vectors[layer].unit}`}
             onClick={() => onSelect(id)}
             onKeyDown={(event) => {
               if (event.key === 'Enter' || event.key === ' ') {
@@ -626,7 +626,7 @@ function TerritoryMap({ zones, visible, selectedId, onSelect, layer }) {
               className="polygon-id"
             >
               {id}
-            </text>
+            </text>{' '}
             <text
               x={center[0]}
               y={center[1] + 15}

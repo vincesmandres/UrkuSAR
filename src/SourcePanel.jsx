@@ -386,7 +386,12 @@ export default function SourcePanel() {
                       del rango.
                     </p>
                   ) : (
-                    <div className="observation-table">
+                    <div
+                      className="observation-table"
+                      role="region"
+                      aria-label={`Observaciones de ${label}`}
+                      tabIndex={0}
+                    >
                       <table>
                         <caption>
                           Primeras {Math.min(upload.records.length, 5)}{' '}

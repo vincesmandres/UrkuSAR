@@ -129,7 +129,8 @@ Este plan ordena la construcción del MVP desde la demo actual hasta un prototip
 
 ## Hito 5 · Calidad, demo y entrega
 
-**Estado:** planificado  
+**Estado:** completado y verificado localmente para la demostración; publicación de estos cambios y revisiones manuales pendientes
+
 **Objetivo:** cerrar un prototipo presentable y verificable.
 
 **Entregables**
@@ -145,10 +146,26 @@ Este plan ordena la construcción del MVP desde la demo actual hasta un prototip
 - Se puede explicar el origen de cada métrica mostrada.
 - No se presentan resultados sintéticos como observaciones oficiales.
 
+**Entregables del 14 noviembre 2026**
+
+- `npm run check` reúne validación de datos, pruebas unitarias, flujos funcionales y comprobaciones del build real bajo `/UrkuSAR/`.
+- Nueva suite `tests/release/quality.spec.js` con escritorio y móvil: recursos, uso offline tras cargar, exportación, teclado, foco modal, movimiento reducido, reporte y tabla importada.
+- Axe-core revisa reglas WCAG 2/2.1 A/AA. Se corrigieron foco del enlace de salto, nombres accesibles del mapa y acceso por teclado a tablas desplazables. El HTML del reporte se audita por separado sin permitir scripts en su iframe.
+- Workflow de Pages ampliado con las pruebas de producción como requisito previo al despliegue y diagnósticos de fallos conservados siete días. Esta ampliación todavía no se ha ejecutado en GitHub mientras permanezca local.
+- README actualizado con la publicación inicial verificada, guion de tres minutos, origen de cada métrica, checklist y plan de demostración sin red después de la carga.
+- Continúan pendientes validación científica, QGIS, lectores de pantalla reales y pruebas en motores distintos de Chromium. No se declara certificación WCAG ni preparación para operación geotécnica.
+
+**Resultado de aceptación local**
+
+- `npm run check` completado: fixture válido, 63 pruebas unitarias, 26 funcionales de navegador y 12 de producción aprobadas.
+- Build `/UrkuSAR/` correcto; carga de recursos sin errores, sin consultas externas automáticas y sin infracciones axe detectadas en los estados auditados.
+- Capturas de escritorio y móvil revisadas; verificación de ancho mínimo 320 px, movimiento reducido, acceso por teclado y descarga de reportes.
+- Checklist técnico y guion documentados en README. El ensayo cronometrado con una persona y la evaluación con lector de pantalla no se consideran realizados por las pruebas automáticas.
+
 ## Orden de trabajo inmediato
 
 1. Obtener y validar productos térmicos y LOS compatibles para cerrar el Hito 3; no convertir metadatos de catálogo en mediciones.
 2. Definir alineación temporal/espacial, línea base térmica y persistencia a partir de series, sin confundir confianza con probabilidad de fallo.
 3. Completar revisión manual del Hito 4 en QGIS y evaluación de supuestos con un especialista; los reportes y las exportaciones ya están implementados.
-4. Autorizar commit/push y activar Pages con GitHub Actions para publicar la revisión. El build de revisión local no es un despliegue público.
-5. Iniciar Hito 5: checklist de entrega, guion de demostración y revisión final de accesibilidad/operación, manteniendo explícitos los pendientes científicos.
+4. Publicación inicial realizada en GitHub Pages; publicar los cambios del Hito 5 mediante un nuevo commit/push autorizado y confirmar la nueva ejecución de calidad.
+5. Ensayar el guion y completar las revisiones manuales de accesibilidad y GIS; priorizar la validación de datos sobre añadir nuevas funciones decorativas.
