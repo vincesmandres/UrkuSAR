@@ -49,7 +49,7 @@ npm run check
 
 La auditoría automática no certifica cumplimiento WCAG ni sustituye una revisión con lectores de pantalla. El iframe del reporte permanece aislado sin scripts: se audita el contenedor modal por separado y el mismo HTML como documento autónomo. Los resultados `incomplete` de axe requieren revisión manual. No se debilita el sandbox para ejecutar la auditoría.
 
-Limitación reproducida de herramienta: Firefox/Windows se cierra dentro de axe después de una selección de archivo. En esa combinación se anotó una excepción únicamente para la auditoría del estado importado, conservando las pruebas de importación y teclado. Chromium, WebKit y el job Linux mantienen esa auditoría; las demás auditorías Firefox permanecen activas. No ejecutar las suites funcional y de producción simultáneamente: comparten artefactos de pruebas.
+Limitación reproducida de herramienta: Firefox se cierra dentro de axe después de una selección de archivo, tanto en Windows como en Linux CI (ejecución `43624158291`). Se anotó una excepción únicamente para la auditoría Firefox del estado importado, conservando sus pruebas de importación y teclado. Chromium y WebKit mantienen esa auditoría completa; las demás auditorías Firefox permanecen activas. No es una aprobación de accesibilidad de ese estado en Firefox. No ejecutar las suites funcional y de producción simultáneamente: comparten artefactos de pruebas.
 
 Para obtener el GeoJSON calculado en stdout, sin navegador:
 
@@ -161,4 +161,4 @@ Si falla la red durante el pitch, continuar con la demo ya cargada. La caché de
 - Comprobar teclado: salto al contenido, selección del mapa, cierre con Escape y retorno de foco.
 - Ensayar el guion en menos de tres minutos y preparar el flujo alternativo sin red tras cargar la página.
 - Antes de publicar, revisar diff y ausencia de credenciales; tras un push autorizado, comprobar el workflow y la URL pública, no solo el build local.
-- Mantener visibles los pendientes: interfaz QGIS, lectores de pantalla reales, dispositivos físicos, excepción axe Firefox/Windows tras importar, datos LOS/QA térmico y revisión geotécnica. No constituyen validaciones completadas por estas pruebas.
+- Mantener visibles los pendientes: interfaz QGIS, lectores de pantalla reales, dispositivos físicos, excepción axe Firefox tras importar, datos LOS/QA térmico y revisión geotécnica. No constituyen validaciones completadas por estas pruebas.

@@ -201,13 +201,13 @@ test('imported observation table is accessible and keyboard-scrollable', async (
   const region = page.getByRole('region', {
     name: 'Observaciones de Detecciones FIRMS',
   })
-  if (process.platform === 'win32' && browserName === 'firefox') {
-    // Reproduced native Firefox/Windows crash inside axe after file selection.
-    // Keep import/keyboard assertions; Linux CI and the other engines run axe.
+  if (browserName === 'firefox') {
+    // Reproduced native Firefox crash on Windows and Linux inside axe after file
+    // selection. Import/keyboard assertions and other engine audits stay active.
     testInfo.annotations.push({
       type: 'audit-limitation',
       description:
-        'Firefox/Windows: axe after file selection crashes the renderer; import and keyboard checks still run.',
+        'Firefox: axe after file selection crashes the renderer on Windows and Linux; import and keyboard checks still run. This state is audited in Chromium and WebKit.',
     })
   } else {
     await audit(page, testInfo, 'imported-observations')

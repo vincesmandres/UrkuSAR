@@ -171,7 +171,7 @@ Este plan ordena la construcción del MVP desde la demo actual hasta un prototip
 **Resultado de aceptación local**
 
 - Ampliación verificada: `npm run check` completo con fixture válido, 64 pruebas unitarias, 56 funcionales de navegador y 24 de producción aprobadas en Chromium escritorio/móvil, Firefox y WebKit. Cinco casos GIS adicionales pasan en GDAL/OGR y GEOS.
-- Excepción local documentada: axe provoca un cierre nativo de Firefox/Windows tras elegir un archivo. Se mantiene la prueba funcional/teclado y se anota únicamente esa auditoría no ejecutada; Linux CI y los otros motores sí la ejecutan. No se suprimen reglas en las auditorías que se ejecutan.
+- Excepción documentada, confirmada también en Linux CI `43624158291`: axe provoca un cierre nativo de Firefox tras elegir un archivo. Se mantiene la prueba funcional/teclado y se anota únicamente esa auditoría Firefox no ejecutada; Chromium y WebKit sí la ejecutan. No se suprimen reglas en las auditorías que se ejecutan ni se afirma aprobación del estado importado en Firefox.
 - Build `/UrkuSAR/` correcto; carga de recursos sin errores, sin consultas externas automáticas y sin infracciones axe detectadas en los estados auditados.
 - Capturas de escritorio y móvil revisadas; verificación de ancho mínimo 320 px, movimiento reducido, acceso por teclado y descarga de reportes.
 - Checklist técnico y guion documentados en README. El ensayo cronometrado con una persona y la evaluación con lector de pantalla no se consideran realizados por las pruebas automáticas.
