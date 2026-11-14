@@ -65,6 +65,7 @@ function App() {
   const [exportError, setExportError] = useState('')
   const [report, setReport] = useState(null)
   const reportDialog = useRef(null)
+  const reportButton = useRef(null)
   const zones = [...analysis.features].sort(
     (a, b) => b.properties.risk - a.properties.risk,
   )
@@ -154,7 +155,7 @@ function App() {
 
   return (
     <>
-      <a className="skip-link" href="#contenido">
+      <a className="skip-link" href="#contenido" tabIndex={0}>
         Saltar al contenido
       </a>
       <header className="site-header">
@@ -421,7 +422,11 @@ function App() {
                 ni una estimación validada. La persistencia no se infiere de una
                 serie temporal en esta versión.
               </p>
-              <button className="button report-button" onClick={openReport}>
+              <button
+                className="button report-button"
+                ref={reportButton}
+                onClick={openReport}
+              >
                 Ver reporte de zona <span aria-hidden="true">↗</span>
               </button>
             </aside>
@@ -504,7 +509,10 @@ function App() {
         className="report-dialog"
         ref={reportDialog}
         aria-labelledby="report-title"
-        onClose={() => setReport(null)}
+        onClose={() => {
+          setReport(null)
+          reportButton.current?.focus()
+        }}
       >
         <div className="report-toolbar">
           <div>

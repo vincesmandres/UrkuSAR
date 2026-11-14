@@ -1,5 +1,29 @@
 import { test, expect } from '@playwright/test'
 
+test('shows archived raster evidence without treating it as a real risk score', async ({
+  page,
+}) => {
+  await page.goto('/')
+  await page
+    .getByText(
+      'Auditoría de productos reales · no aptos para calcular riesgo',
+      { exact: true },
+    )
+    .click()
+  await expect(page.getByTestId('thermal-audit-quality')).toContainText(
+    '0 de 4 píxeles cumplen DQF=0',
+  )
+  await expect(
+    page.getByRole('link', { name: 'GeoTIFF de coherencia original' }),
+  ).toHaveAttribute('href', /142D_09148_131313/)
+  await expect(page.getByTestId('selected-score')).toHaveText('91')
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true)
+})
+
 async function mockCatalogs(page) {
   await page.route(
     'https://cmr.earthdata.nasa.gov/search/granules.json?**',
@@ -144,20 +168,16 @@ test('imports FIRMS and processed InSAR CSV without converting them into a risk 
     'latitude,longitude,brightness,frp,confidence,satellite,acq_date,acq_time\n-0.65,-78.4,310.2,4.5,90,Terra,2026-11-01,1200\n'
   const insar =
     'latitude,longitude,date,displacement_mm,coherence,reference_date,product_id,source_url\n-0.65,-78.4,2026-11-01,-12.4,0.85,2026-10-01,S1-processed,https://example.org/product\n'
-  await page
-    .getByLabel('Importar Detecciones FIRMS')
-    .setInputFiles({
-      name: 'firms.csv',
-      mimeType: 'text/csv',
-      buffer: Buffer.from(firms),
-    })
-  await page
-    .getByLabel('Importar Deformación InSAR')
-    .setInputFiles({
-      name: 'insar.csv',
-      mimeType: 'text/csv',
-      buffer: Buffer.from(insar),
-    })
+  await page.getByLabel('Importar Detecciones FIRMS').setInputFiles({
+    name: 'firms.csv',
+    mimeType: 'text/csv',
+    buffer: Buffer.from(firms),
+  })
+  await page.getByLabel('Importar Deformación InSAR').setInputFiles({
+    name: 'insar.csv',
+    mimeType: 'text/csv',
+    buffer: Buffer.from(insar),
+  })
   await expect(
     page.getByText('1 observaciones en el rango', { exact: true }),
   ).toHaveCount(2)
@@ -168,13 +188,11 @@ test('imports FIRMS and processed InSAR CSV without converting them into a risk 
     page.getByRole('cell', { name: '-12.4', exact: true }),
   ).toBeVisible()
   await expect(page.getByTestId('selected-score')).toHaveText('91')
-  await page
-    .getByLabel('Importar Detecciones FIRMS')
-    .setInputFiles({
-      name: 'bad.csv',
-      mimeType: 'text/csv',
-      buffer: Buffer.from('wrong,header\n1,2'),
-    })
+  await page.getByLabel('Importar Detecciones FIRMS').setInputFiles({
+    name: 'bad.csv',
+    mimeType: 'text/csv',
+    buffer: Buffer.from('wrong,header\n1,2'),
+  })
   await expect(page.getByRole('alert')).toContainText(
     'No se reemplazó la última importación válida.',
   )

@@ -97,7 +97,14 @@ Este plan ordena la construcción del MVP desde la demo actual hasta un prototip
 - Obtener un producto de deformación LOS procesado que cubra Cotopaxi, con referencia, coherencia, geometría y unidades. OPERA DISP-S1 no cubre Ecuador; las escenas SLC no son desplazamiento.
 - Establecer línea base térmica y QA: el brillo FIRMS en Kelvin y la FRP en MW no equivalen a una anomalía °C.
 - Alinear fechas/resoluciones y definir persistencia sobre series antes de conectar observaciones al índice. Por ahora las importaciones y catálogos están deliberadamente separados de la demo sintética.
-- Validar con archivos de campo/proveedor: las pruebas CSV usan ejemplos de test, no un dataset científico validado. No se implementó lector nativo HDF5/GeoTIFF ni ingesta NISAR.
+- Validar con archivos de campo/proveedor: las pruebas CSV usan ejemplos de test, no un dataset científico validado. La nueva auditoría CLI lee dos rasters concretos; no implementa una ingesta genérica NISAR ni genera un índice real.
+
+**Evidencia añadida el 14 noviembre 2026**
+
+- `scripts/audit-products.py` descarga/verifica dos productos públicos fijados, comprueba su cobertura y QA y genera `src/data/product-audit.json`, visible en Fuentes con fecha, hash, atribución y límites.
+- GeoTIFF LiCSAR de coherencia, frame correcto `142D_09148_131313`, par 2025-05-26/2025-06-07: cobertura de Cotopaxi confirmada leyendo el raster. No es desplazamiento LOS y no se convierte arbitrariamente a mm.
+- NOAA GOES-19 LST del 2026-11-14: 4 centros de píxel en el área, 0 con DQF=0. Se conservan nulos para temperatura y anomalía; no se imputan ceros.
+- No hay correspondencia temporal ni línea base. El cierre científico sigue bloqueado y la app lo comunica, en lugar de presentar el fixture como observación real.
 
 ## Hito 4 · Exportación y revisión geotécnica
 
@@ -127,9 +134,14 @@ Este plan ordena la construcción del MVP desde la demo actual hasta un prototip
 - 63 pruebas unitarias y 26 de navegador correctas: subconjuntos, metadatos, snapshots, escape HTML, descarga, modo offline, estilos de impresión y navegación modal por teclado. Build de producción correcto.
 - No hay ejecutables QGIS/ogrinfo disponibles en el entorno. Se verificaron invariantes GeoJSON/CRS y descarga en navegador, no una apertura en QGIS. Vocabulario revisado para evitar promesas predictivas; los umbrales siguen sin calibración ni aprobación profesional.
 
+**Verificación independiente del 14 noviembre 2026**
+
+- GDAL/OGR 3.12.4 y GEOS 3.14.1 abren y validan 5 exportaciones reales generadas desde la app: todas, selección, filtro, pesos cambiados y vacía. CRS, coordenadas, atributos, extensión y topología correctos.
+- `scripts/check-gis.py` permite repetir la verificación y el workflow incorpora un job GIS previo al despliegue. No equivale a una revisión visual en QGIS ni a aprobación profesional.
+
 ## Hito 5 · Calidad, demo y entrega
 
-**Estado:** completado y verificado localmente para la demostración; publicación de estos cambios y revisiones manuales pendientes
+**Estado:** versión inicial publicada (`7e606e4`, Actions `43620874329` correcto); ampliación de compatibilidad/GIS y auditoría raster implementada, sin cierre científico ni revisión profesional
 
 **Objetivo:** cerrar un prototipo presentable y verificable.
 
@@ -151,13 +163,15 @@ Este plan ordena la construcción del MVP desde la demo actual hasta un prototip
 - `npm run check` reúne validación de datos, pruebas unitarias, flujos funcionales y comprobaciones del build real bajo `/UrkuSAR/`.
 - Nueva suite `tests/release/quality.spec.js` con escritorio y móvil: recursos, uso offline tras cargar, exportación, teclado, foco modal, movimiento reducido, reporte y tabla importada.
 - Axe-core revisa reglas WCAG 2/2.1 A/AA. Se corrigieron foco del enlace de salto, nombres accesibles del mapa y acceso por teclado a tablas desplazables. El HTML del reporte se audita por separado sin permitir scripts en su iframe.
-- Workflow de Pages ampliado con las pruebas de producción como requisito previo al despliegue y diagnósticos de fallos conservados siete días. Esta ampliación todavía no se ha ejecutado en GitHub mientras permanezca local.
+- Workflow de Pages ampliado con pruebas de producción y diagnósticos de fallos conservados siete días. La primera ampliación se publicó correctamente el 14 de noviembre de 2026.
 - README actualizado con la publicación inicial verificada, guion de tres minutos, origen de cada métrica, checklist y plan de demostración sin red después de la carga.
-- Continúan pendientes validación científica, QGIS, lectores de pantalla reales y pruebas en motores distintos de Chromium. No se declara certificación WCAG ni preparación para operación geotécnica.
+- Se ampliaron las suites a Firefox y WebKit, además de Chromium escritorio/móvil. Se corrigieron foco del botón de reporte y orden de tabulación del enlace de salto en WebKit.
+- Continúan pendientes validación científica, interfaz QGIS, lectores de pantalla reales y dispositivos físicos. No se declara certificación WCAG ni preparación para operación geotécnica.
 
 **Resultado de aceptación local**
 
-- `npm run check` completado: fixture válido, 63 pruebas unitarias, 26 funcionales de navegador y 12 de producción aprobadas.
+- Ampliación verificada: `npm run check` completo con fixture válido, 64 pruebas unitarias, 56 funcionales de navegador y 24 de producción aprobadas en Chromium escritorio/móvil, Firefox y WebKit. Cinco casos GIS adicionales pasan en GDAL/OGR y GEOS.
+- Excepción local documentada: axe provoca un cierre nativo de Firefox/Windows tras elegir un archivo. Se mantiene la prueba funcional/teclado y se anota únicamente esa auditoría no ejecutada; Linux CI y los otros motores sí la ejecutan. No se suprimen reglas en las auditorías que se ejecutan.
 - Build `/UrkuSAR/` correcto; carga de recursos sin errores, sin consultas externas automáticas y sin infracciones axe detectadas en los estados auditados.
 - Capturas de escritorio y móvil revisadas; verificación de ancho mínimo 320 px, movimiento reducido, acceso por teclado y descarga de reportes.
 - Checklist técnico y guion documentados en README. El ensayo cronometrado con una persona y la evaluación con lector de pantalla no se consideran realizados por las pruebas automáticas.
@@ -167,5 +181,5 @@ Este plan ordena la construcción del MVP desde la demo actual hasta un prototip
 1. Obtener y validar productos térmicos y LOS compatibles para cerrar el Hito 3; no convertir metadatos de catálogo en mediciones.
 2. Definir alineación temporal/espacial, línea base térmica y persistencia a partir de series, sin confundir confianza con probabilidad de fallo.
 3. Completar revisión manual del Hito 4 en QGIS y evaluación de supuestos con un especialista; los reportes y las exportaciones ya están implementados.
-4. Publicación inicial realizada en GitHub Pages; publicar los cambios del Hito 5 mediante un nuevo commit/push autorizado y confirmar la nueva ejecución de calidad.
+4. Mantener la publicación en GitHub Pages con gates de pruebas y GIS; el Hito 5 inicial ya está publicado y se verifica cada nueva ejecución antes de afirmar un despliegue.
 5. Ensayar el guion y completar las revisiones manuales de accesibilidad y GIS; priorizar la validación de datos sobre añadir nuevas funciones decorativas.

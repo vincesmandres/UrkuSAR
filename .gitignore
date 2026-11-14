@@ -4,3 +4,6 @@ dist/
 *.local
 test-results/
 playwright-report/
+.venv-gis/
+.data-cache/
+__pycache__/

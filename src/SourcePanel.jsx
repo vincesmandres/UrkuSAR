@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import productAudit from './data/product-audit.json'
 import {
   DEFAULT_QUERY,
   SOURCES,
@@ -301,6 +302,104 @@ export default function SourcePanel() {
         hace falta un producto LOS procesado y validado. No se imputan ceros ni
         se completa el índice con datos inventados.
       </p>
+
+      <details className="product-audit">
+        <summary>
+          Auditoría de productos reales · no aptos para calcular riesgo
+        </summary>
+        <p>
+          Inspección reproducible del {timestamp(productAudit.checkedAt)} UTC.
+          Es una evidencia archivada de dos archivos concretos, no monitoreo
+          actual ni un resultado para el rango del formulario.
+        </p>
+        <p>
+          BBOX verificado: {productAudit.bbox.join(', ')}. El índice de arriba
+          continúa usando exclusivamente el fixture sintético.
+        </p>
+        <div className="import-grid">
+          <article>
+            <h4>COMET LiCSAR · coherencia</h4>
+            <p>
+              Frame {productAudit.products.licsar.frame}, par{' '}
+              {productAudit.products.licsar.referenceDate} /{' '}
+              {productAudit.products.licsar.secondaryDate}. Cobertura del área
+              confirmada al leer el GeoTIFF.
+            </p>
+            <p>
+              {productAudit.products.licsar.sampleCount.toLocaleString('es-EC')}{' '}
+              celdas inspeccionadas. La coherencia no mide desplazamiento y no
+              se convierte en milímetros.
+            </p>
+            <a
+              className="source-documentation"
+              href={productAudit.products.licsar.url}
+              target="_blank"
+              rel="noreferrer"
+            >
+              GeoTIFF de coherencia original ↗
+            </a>
+            {' · '}
+            <a
+              className="source-documentation"
+              href={productAudit.products.licsar.license}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Licencia y atribución ↗
+            </a>
+            <p className="footnote">
+              SHA-256: <code>{productAudit.products.licsar.sha256}</code>
+            </p>
+            <p className="footnote">{productAudit.products.licsar.citation}</p>
+            <p className="footnote" lang="en">
+              {productAudit.products.licsar.acknowledgement}
+            </p>
+          </article>
+          <article>
+            <h4>NOAA GOES-19 · temperatura superficial</h4>
+            <p>
+              Observación {timestamp(productAudit.products.goes.timeStart)} UTC.
+              Resolución nominal: {productAudit.products.goes.spatialResolution}
+              .
+            </p>
+            <p data-testid="thermal-audit-quality">
+              {productAudit.products.goes.highQualitySamples} de{' '}
+              {productAudit.products.goes.sampleCount} píxeles cumplen DQF=0. No
+              hay temperatura válida para calcular anomalía en esta muestra.
+            </p>
+            <a
+              className="source-documentation"
+              href={productAudit.products.goes.url}
+              target="_blank"
+              rel="noreferrer"
+            >
+              NetCDF térmico original ↗
+            </a>
+            {' · '}
+            <a
+              className="source-documentation"
+              href={productAudit.products.goes.license}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Condiciones y documentación ↗
+            </a>
+            <p className="footnote">
+              SHA-256: <code>{productAudit.products.goes.sha256}</code>
+            </p>
+            <p className="footnote">
+              {productAudit.products.goes.citation}{' '}
+              {productAudit.products.goes.acknowledgement}
+            </p>
+          </article>
+        </div>
+        <h4>Por qué no se combinan</h4>
+        <ul>
+          {productAudit.blockers.map((blocker) => (
+            <li key={blocker}>{blocker}</li>
+          ))}
+        </ul>
+      </details>
 
       <div className="import-heading">
         <h3>Incorporar observaciones</h3>

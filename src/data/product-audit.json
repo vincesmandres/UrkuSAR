@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "1.0.0",
+  "checkedAt": "2026-11-14T17:48:31.010Z",
+  "bbox": [
+    -78.46,
+    -0.74,
+    -78.28,
+    -0.57
+  ],
+  "products": {
+    "licsar": {
+      "frame": "142D_09148_131313",
+      "referenceDate": "2025-05-26",
+      "secondaryDate": "2025-06-07",
+      "type": "coherence-only",
+      "crs": "EPSG:4326",
+      "bounds": [
+        -79.1291389,
+        -2.8775834,
+        -76.3671389,
+        -0.0880834
+      ],
+      "coversStudyArea": true,
+      "pixelSizeDegrees": [
+        0.0005,
+        0.0005
+      ],
+      "sampleCount": 122400,
+      "validSamples": 122400,
+      "nodata": null,
+      "scale": "uint8 / 255; dimensionless, NOT displacement",
+      "coherenceMin": 0.0,
+      "coherenceMedian": 0.5686274509803921,
+      "coherenceMax": 0.9568627450980393,
+      "url": "https://dap.ceda.ac.uk/neodc/comet/data/licsar_products/142/142D_09148_131313/20250526_20250607/20250526_20250607.geo.cc.tif?download=1",
+      "sha256": "8e509e36001da25421c57e220656f33b697daa1c1d5052810f8a1d2ae6340154",
+      "bytes": 12113454,
+      "license": "https://dap.ceda.ac.uk/neodc/comet/data/licsar_products/00README_catalogue_and_licence.txt",
+      "citation": "Lazecky, M.; Maghsoudi, Y. (2022): LiCSAR interferometry products. NERC EDS Centre for Environmental Data Analysis. https://catalogue.ceda.ac.uk/uuid/52cda2e0e6c04272ae15ac836c1e8493 (consultado 2026-11-14).",
+      "acknowledgement": "LiCSAR contains modified Copernicus Sentinel data 2025 analysed by the Centre for the Observation and Modelling of Earthquakes, Volcanoes and Tectonics (COMET). LiCSAR uses JASMIN, the UK's collaborative data analysis environment (https://jasmin.ac.uk)."
+    },
+    "goes": {
+      "type": "land-surface-temperature",
+      "variable": "LST",
+      "unit": "K",
+      "timeStart": "2026-11-14T17:00:20.8Z",
+      "timeEnd": "2026-11-14T17:09:51.6Z",
+      "spatialResolution": "10.0km at nadir",
+      "sampleCount": 4,
+      "highQualitySamples": 0,
+      "dqfRule": "Pixel center in study bbox; DQF == 0, unmasked finite LST; no cloud filling",
+      "dqfMeanings": "high_quality_retrieval_qf medium_quality_retrieval_qf low_quality_retrieval_qf no_retrieval_qf",
+      "dqfValues": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "temperatureKMin": null,
+      "temperatureKMax": null,
+      "anomalyC": null,
+      "baselineStatus": "not-established",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2026/318/17/OR_ABI-L2-LSTF-M6_G19_s20263181700208_e20263181709516_c20263181714061.nc",
+      "sha256": "ece56e5f3156338eab1475c264278e03563f8dfae76ab1370866ccbafd469991",
+      "bytes": 736357,
+      "license": "https://registry.opendata.aws/noaa-goes/",
+      "citation": "NOAA GOES-19 ABI-L2-LSTF, NOAA Open Data Dissemination, archivo 2026-11-14 17:00 UTC.",
+      "acknowledgement": "Datos NOAA abiertos; su uso no implica respaldo de NOAA a UrkuSAR."
+    }
+  },
+  "eligibleForRiskIndex": false,
+  "blockers": [
+    "El raster LiCSAR inspeccionado mide coherencia, no desplazamiento LOS; no se han validado referencia de fase ni correcci\u00f3n atmosf\u00e9rica.",
+    "El par SAR es de 2025 y la observaci\u00f3n t\u00e9rmica de 2026; no hay correspondencia temporal.",
+    "No hay l\u00ednea base t\u00e9rmica ni serie de persistencia; una muestra LST no es una anomal\u00eda.",
+    "No hay calibraci\u00f3n ni aprobaci\u00f3n geot\u00e9cnica profesional.",
+    "Ning\u00fan p\u00edxel t\u00e9rmico del \u00e1rea cumple DQF=0 en este archivo; no se rellenan valores ausentes."
+  ],
+  "scope": "Productos binarios p\u00fablicos inspeccionados localmente; no es un diagn\u00f3stico de peligro."
+}

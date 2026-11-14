@@ -35,19 +35,21 @@ Probado con Node.js 24.15.0. Para ejecutar la suite de navegador por primera vez
 
 ```bash
 npm ci
-npx playwright install chromium
+npx playwright install chromium firefox webkit
 npm run check
 ```
 
 `npm run check` valida el fixture, ejecuta las pruebas unitarias, las de navegador y las de producción. Usa `npm ci` para reproducir las versiones del lockfile.
 
 - `npm test`: modelo, ingesta y exportación, sin red.
-- `npm run test:e2e`: flujos funcionales de escritorio y móvil con Vite en `127.0.0.1:4174`.
+- `npm run test:e2e`: flujos en Chromium escritorio/móvil, Firefox y WebKit con Vite en `127.0.0.1:4174`. WebKit automatizado no equivale a probar un iPhone físico.
 - `npm run test:release`: genera `dist` para `/UrkuSAR/` y prueba ese artefacto con preview en `127.0.0.1:4175/UrkuSAR/`. No utiliza el servidor de desarrollo.
 - Las pruebas de producción verifican carga de recursos, ausencia de consultas externas automáticas, uso sin red tras la carga, descarga, navegación por teclado y reglas automáticas WCAG 2/2.1 A/AA mediante axe-core.
 - Los servidores de pruebas se detienen al terminar. Los puertos 4174 y 4175 deben estar libres. Las capturas, trazas y resultados axe se guardan en `test-results/`, ignorado por Git.
 
 La auditoría automática no certifica cumplimiento WCAG ni sustituye una revisión con lectores de pantalla. El iframe del reporte permanece aislado sin scripts: se audita el contenedor modal por separado y el mismo HTML como documento autónomo. Los resultados `incomplete` de axe requieren revisión manual. No se debilita el sandbox para ejecutar la auditoría.
+
+Limitación reproducida de herramienta: Firefox/Windows se cierra dentro de axe después de una selección de archivo. En esa combinación se anotó una excepción únicamente para la auditoría del estado importado, conservando las pruebas de importación y teclado. Chromium, WebKit y el job Linux mantienen esa auditoría; las demás auditorías Firefox permanecen activas. No ejecutar las suites funcional y de producción simultáneamente: comparten artefactos de pruebas.
 
 Para obtener el GeoJSON calculado en stdout, sin navegador:
 
@@ -75,6 +77,27 @@ npm run check:sources
 
 OPERA DISP-S1 no cubre Cotopaxi. El cierre científico del Hito 3 requiere datos LOS procesados para Ecuador, una línea base térmica y alineación temporal/espacial. Los pesos y umbrales del índice siguen siendo ilustrativos.
 
+### Evidencia raster real
+
+En **Fuentes → Auditoría de productos reales** se muestra una inspección archivada reproducible, con URLs, SHA-256 y atribución; no depende del rango del formulario ni modifica el score:
+
+- COMET LiCSAR, frame `142D_09148_131313`, par 2025-05-26/2025-06-07: GeoTIFF de coherencia de 12.1 MB. Su extensión WGS84 cubre Cotopaxi; 122400 celdas inspeccionadas, escala 0–255. **Coherencia no es desplazamiento LOS.**
+- NOAA GOES-19 ABI-L2-LSTF, 2026-11-14 17:00 UTC: NetCDF de 0.74 MB. Cuatro centros de píxel en el área; ninguno cumple calidad DQF=0. La temperatura y anomalía permanecen nulas, no se rellenan con cero.
+- No hay compatibilidad temporal entre esos productos ni línea base térmica. `eligibleForRiskIndex` es `false`; la evidencia no habilita un análisis de peligro real.
+
+Preparación opcional del entorno GIS, sin afectar la aplicación web:
+
+```powershell
+python -m venv .venv-gis
+.\.venv-gis\Scripts\python.exe -m pip install -r scripts/requirements-gis.txt
+.\.venv-gis\Scripts\python.exe scripts/check-gis.py
+.\.venv-gis\Scripts\python.exe scripts/audit-products.py
+```
+
+En Linux usar `.venv-gis/bin/python`. `audit-products.py` descarga únicamente los dos archivos fijados (~13 MB), verifica tamaños/checksums y reutiliza `.data-cache/`; falla si cambian. `--output src/data/product-audit.json` regenera la evidencia de la interfaz. No descarga SLC grandes ni publica los binarios. El job GIS de CI no descarga productos remotos: valida exportaciones con GDAL/OGR y GEOS.
+
+Fuente LiCSAR: Lazecky, M.; Maghsoudi, Y. (2022), *LiCSAR interferometry products*, NERC EDS CEDA. [Registro y cita](https://catalogue.ceda.ac.uk/uuid/52cda2e0e6c04272ae15ac836c1e8493), consultado 2026-11-14. Licencia OGL-3. LiCSAR contains modified Copernicus Sentinel data 2025 analysed by COMET. LiCSAR uses JASMIN, the UK's collaborative data analysis environment. Los datos NOAA son abiertos; su uso no implica respaldo a UrkuSAR.
+
 ## Reportes y exportación
 
 1. Seleccionar una zona en el mapa o la lista. Los filtros de nivel controlan las zonas visibles; no cambian la selección automáticamente.
@@ -86,11 +109,13 @@ Los reportes conservan advertencias visibles: demostración sintética, índice 
 
 Para revisar el GeoJSON en QGIS, añadir el archivo como capa vectorial. Se conserva el CRS `urn:ogc:def:crs:OGC:1.3:CRS84` (WGS84, longitud/latitud) y se añaden campos planos `zoneId`, `dataStatus`, `thermalWeight`, `thermalContribution` y equivalentes, además de la explicación anidada. Comparar la cantidad de entidades con `metadata.export.featureCount` y verificar el orden de coordenadas y sus fechas. No se efectuó una prueba directa en QGIS en este entorno; queda como revisión manual pendiente junto con la aprobación geotécnica.
 
+Verificación GIS independiente realizada con GDAL/OGR 3.12.4 y GEOS 3.14.1: las cinco exportaciones (todas, seleccionada, visibles, pesos modificados y vacía) se leen con CRS EPSG:4326, cantidades correctas, atributos numéricos preservados y polígonos válidos sin cambios de coordenadas. Se ejecuta desde el exportador real de la aplicación, no con archivos de prueba escritos a mano. Esto no reemplaza la revisión visual en QGIS ni la inspección de campo.
+
 ## Despliegue de revisión
 
 GitHub Pages está habilitado con GitHub Actions en el repositorio público `vincesmandres/UrkuSAR`. Publicación inicial verificada el 14 de noviembre de 2026 en **https://vincesmandres.github.io/UrkuSAR/**. La ejecución `43616067248`, intento 2, finalizó correctamente después de activar Pages.
 
-`.github/workflows/pages.yml` valida fixtures y pruebas funcionales antes de ejecutar la nueva puerta de calidad `test:release`; solo sube el artefacto y despliega si todas pasan. Ante un fallo guarda diagnósticos durante siete días. Los cambios locales no se publican automáticamente: requieren commit/push a `main` o ejecutar el workflow sobre un commit ya subido. Para un nuevo repositorio es necesario activar **Settings → Pages → Source: GitHub Actions**; de lo contrario el despliegue puede devolver 404.
+`.github/workflows/pages.yml` valida fixtures, pruebas funcionales en tres motores y `test:release`; además ejecuta un job GIS independiente. Solo despliega si ambos jobs pasan. Ante un fallo conserva diagnósticos siete días. El Hito 5 inicial (`7e606e4`) se publicó correctamente en la ejecución `43620874329`. Los cambios locales posteriores requieren commit/push a `main`. Para un nuevo repositorio es necesario activar **Settings → Pages → Source: GitHub Actions**; de lo contrario el despliegue puede devolver 404.
 
 Para revisar localmente el mismo artefacto y su ruta base:
 
@@ -129,11 +154,11 @@ Si falla la red durante el pitch, continuar con la demo ya cargada. La caché de
 
 ## Checklist de entrega
 
-- Ejecutar `npm ci`, instalar Chromium y completar `npm run check` sin fallos.
+- Ejecutar `npm ci`, instalar Chromium/Firefox/WebKit y completar `npm run check` sin fallos, además de `scripts/check-gis.py` en el entorno GIS.
 - Revisar las capturas de escritorio/móvil y los resultados axe; no ignorar advertencias `incomplete` sin revisión.
 - Confirmar etiquetas sintéticas, valores iniciales Z-04=91 y separación entre catálogo e índice.
 - Probar selección, filtros, recálculo, exportación de subconjuntos y reporte descargado.
 - Comprobar teclado: salto al contenido, selección del mapa, cierre con Escape y retorno de foco.
 - Ensayar el guion en menos de tres minutos y preparar el flujo alternativo sin red tras cargar la página.
 - Antes de publicar, revisar diff y ausencia de credenciales; tras un push autorizado, comprobar el workflow y la URL pública, no solo el build local.
-- Mantener visibles los pendientes: QGIS, lectores de pantalla reales, otros motores de navegador, datos LOS/QA térmico y revisión geotécnica. No constituyen validaciones completadas por estas pruebas.
+- Mantener visibles los pendientes: interfaz QGIS, lectores de pantalla reales, dispositivos físicos, excepción axe Firefox/Windows tras importar, datos LOS/QA térmico y revisión geotécnica. No constituyen validaciones completadas por estas pruebas.

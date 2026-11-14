@@ -66,3 +66,11 @@ Se añaden `metadata.export` (alcance, filtro/selección, fecha, número de enti
 `createZoneReport` captura una copia independiente de la zona y metadatos. `renderZoneReport` produce HTML con datos escapados, CSP restrictiva, sin scripts, sin solicitudes externas y estilos de impresión A4. La vista previa usa un iframe con sandbox dentro de un diálogo modal. La descarga conserva la misma copia que se está previsualizando; el PDF se obtiene con la función de impresión del navegador, no con un servicio de generación.
 
 El formato de reporte actual solo acepta el estado `synthetic`. Identifica área declarada versus geometría, confianza declarada versus probabilidad de fallo, umbrales ilustrativos versus validación profesional y fuentes previstas versus observaciones reales. La revisión en QGIS y la calibración/aprobación geotécnica permanecen pendientes.
+
+### 8. Auditoría raster y GIS independiente
+
+La aplicación incluye una evidencia archivada, no un nuevo vector para `analyze`. `scripts/audit-products.py` fija URLs, tamaño y SHA-256 de un GeoTIFF de coherencia LiCSAR y un NetCDF NOAA GOES-19 LST. Comprueba CRS/cobertura, escala documentada 0–255 de coherencia, geolocalización de centros de píxel desde la proyección geostacionaria CF, unidades Kelvin y selección DQF=0. No rellena ausencias, no confunde coherencia con mm y no convierte una temperatura absoluta en anomalía. El resultado y sus bloqueos quedan en `src/data/product-audit.json`; los binarios se conservan únicamente en `.data-cache/` ignorado por Git.
+
+Las fechas de esos productos no son compatibles y no hay línea base térmica ni referencia de fase validada. La salida `eligibleForRiskIndex: false` es una decisión deliberada, no un valor de riesgo cero. El script es un auditor de dos productos fijados, no un procesador genérico InSAR o un pipeline de series temporales listo para operar.
+
+`scripts/check-gis.py` obtiene cinco GeoJSON directamente del exportador JS y los abre con el driver GDAL/OGR. Verifica conteo, CRS, campos numéricos, extensión, igualdad de coordenadas y topología GEOS. No requiere GeoPandas ni un servidor GIS y forma parte de CI; la interfaz QGIS y evaluación experta no se simulan. Dependencias Python aisladas y fijadas en `scripts/requirements-gis.txt`.

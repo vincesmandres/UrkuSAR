@@ -5,7 +5,7 @@ export default defineConfig({
   ...browserConfig,
   testDir: './tests/release',
   outputDir: './test-results/release',
-  workers: process.env.CI ? 2 : undefined,
+  workers: 2,
   use: {
     baseURL: 'http://127.0.0.1:4175/UrkuSAR/',
     trace: 'retain-on-failure',
