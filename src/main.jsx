@@ -1,76 +1,655 @@
-import { StrictMode, useState } from 'react'
+import { StrictMode, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import { getZones } from './data/adapter'
+import { dataMetadata, getAnalysis } from './data/adapter.js'
+import { DEFAULT_CONFIG } from './data/model.js'
+import {
+  createZoneReport,
+  exportAnalysis,
+  renderZoneReport,
+} from './data/export.js'
+import SourcePanel from './SourcePanel.jsx'
 import './styles.css'
 
-const zones = getZones()
+const levels = { critical: 'Crítico', elevated: 'Elevado', watch: 'Vigilancia' }
+const vectors = {
+  thermal: {
+    label: 'Anomalía térmica',
+    unit: '°C',
+    property: 'thermalAnomalyC',
+  },
+  displacement: {
+    label: 'Deformación',
+    unit: 'mm',
+    property: 'displacementMm',
+  },
+  persistence: {
+    label: 'Persistencia',
+    unit: 'días',
+    property: 'persistenceDays',
+  },
+}
+const number = (value, digits = 1) =>
+  new Intl.NumberFormat('es-EC', { maximumFractionDigits: digits }).format(
+    value,
+  )
+const date = (value) =>
+  new Intl.DateTimeFormat('es-EC', {
+    dateStyle: 'medium',
+    timeZone: 'UTC',
+  }).format(new Date(value))
+const initialAnalysis = getAnalysis()
 
-const navItems = [
-  ['overview', 'Resumen', '⌁'],
-  ['layers', 'Capas de datos', '◈'],
-  ['history', 'Histórico', '◴'],
-]
-
-function Icon({ children }) { return <span className="icon" aria-hidden="true">{children}</span> }
+function saveText(text, type, filename) {
+  const url = URL.createObjectURL(new Blob([text], { type }))
+  const link = document.createElement('a')
+  link.href = url
+  link.download = filename
+  link.click()
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000)
+}
 
 function App() {
-  const [activeNav, setActiveNav] = useState('overview')
-  const [activeZone, setActiveZone] = useState(zones[0])
-  const [period, setPeriod] = useState('30D')
-  const [layers, setLayers] = useState({ thermal: true, displacement: true, risk: true })
-  const [notice, setNotice] = useState('')
+  const [config, setConfig] = useState(DEFAULT_CONFIG)
+  const [weights, setWeights] = useState({
+    thermal: 35,
+    displacement: 45,
+    persistence: 20,
+  })
+  const [analysis, setAnalysis] = useState(initialAnalysis)
+  const [selectedId, setSelectedId] = useState(initialAnalysis.features[0].id)
+  const [filter, setFilter] = useState('all')
+  const [layer, setLayer] = useState('risk')
+  const [error, setError] = useState('')
+  const [message, setMessage] = useState('')
+  const [exportScope, setExportScope] = useState('all')
+  const [exportError, setExportError] = useState('')
+  const [report, setReport] = useState(null)
+  const reportDialog = useRef(null)
+  const zones = [...analysis.features].sort(
+    (a, b) => b.properties.risk - a.properties.risk,
+  )
+  const visible = zones.filter(
+    ({ properties }) => filter === 'all' || properties.level === filter,
+  )
+  const selected = zones.find(({ id }) => id === selectedId)
+  const p = selected.properties
+  const criticalCount = zones.filter(
+    ({ properties }) => properties.level === 'critical',
+  ).length
 
-  const toggleLayer = (key) => setLayers((current) => ({ ...current, [key]: !current[key] }))
+  function recalculate(event) {
+    event.preventDefault()
+    const next = {
+      ...config,
+      weights: Object.fromEntries(
+        Object.entries(weights).map(([key, value]) => [
+          key,
+          Number(value) / 100,
+        ]),
+      ),
+    }
+    try {
+      setAnalysis(getAnalysis(next))
+      setConfig(next)
+      setError('')
+      setMessage(
+        'Índice recalculado. Los resultados y el GeoJSON usan los pesos aplicados.',
+      )
+    } catch (failure) {
+      setError(failure.message)
+      setMessage('')
+    }
+  }
 
-  const notify = (message) => { setNotice(message); window.setTimeout(() => setNotice(''), 2800) }
+  function reset() {
+    setConfig(DEFAULT_CONFIG)
+    setWeights({ thermal: 35, displacement: 45, persistence: 20 })
+    setAnalysis(getAnalysis())
+    setError('')
+    setMessage('Pesos predeterminados restaurados.')
+  }
+
+  function download() {
+    try {
+      const collection = exportAnalysis(analysis, {
+        scope: exportScope,
+        selectedId,
+        level: filter,
+      })
+      const suffix =
+        exportScope === 'selected'
+          ? selectedId
+          : exportScope === 'visible'
+            ? `visibles-${filter}`
+            : 'todas'
+      saveText(
+        JSON.stringify(collection, null, 2),
+        'application/geo+json',
+        `urkusar-${suffix.replace(/[^a-z0-9_-]/gi, '_')}.geojson`,
+      )
+      setExportError('')
+    } catch (failure) {
+      setExportError(failure.message)
+    }
+  }
+
+  function openReport() {
+    try {
+      const snapshot = createZoneReport(analysis, selectedId)
+      setReport({ data: snapshot, html: renderZoneReport(snapshot) })
+      setExportError('')
+      reportDialog.current.showModal()
+    } catch (failure) {
+      setExportError(failure.message)
+    }
+  }
+
+  function downloadReport() {
+    saveText(
+      report.html,
+      'text/html;charset=utf-8',
+      `urkusar-reporte-${report.data.zone.id.replace(/[^a-z0-9_-]/gi, '_')}.html`,
+    )
+  }
 
   return (
-    <div className="app-shell">
-      <aside className="sidebar">
-        <div className="brand"><div className="brand-mark"><span /><span /><span /></div><div><strong>UrkuSAR</strong><small>ANALYTICS</small></div></div>
-        <div className="workspace-label">ESPACIO DE TRABAJO <button onClick={() => notify('Selector de proyectos disponible próximamente')}>⌄</button></div>
-        <div className="workspace"><span className="workspace-dot" />Cotopaxi / Ecuador<span className="status-dot" /></div>
-        <nav className="main-nav" aria-label="Navegación principal">
-          {navItems.map(([id, label, glyph]) => <button key={id} className={activeNav === id ? 'active' : ''} onClick={() => setActiveNav(id)}><Icon>{glyph}</Icon>{label}{id === 'layers' && <span className="nav-count">3</span>}</button>)}
+    <>
+      <a className="skip-link" href="#contenido">
+        Saltar al contenido
+      </a>
+      <header className="site-header">
+        <a className="brand" href="#contenido" aria-label="UrkuSAR, inicio">
+          <svg viewBox="0 0 34 28" aria-hidden="true">
+            <path d="M2 25 15 3l5 8 4-5 9 19H2Z M10 25l10-14" />
+          </svg>
+          Urku<span>SAR</span>
+        </a>
+        <nav aria-label="Navegación principal">
+          <a href="#analisis">Territorio</a>
+          <a href="#metodo">Modelo</a>
+          <a href="#fuentes">Fuentes</a>
         </nav>
-        <div className="sidebar-rule" />
-        <div className="workspace-label">MONITOREO ACTIVO</div>
-        <div className="monitor-item"><span className="pulse purple" /><div><strong>Volcán Cotopaxi</strong><small>Última lectura · 14 min</small></div><span className="chevron">›</span></div>
-        <div className="monitor-item"><span className="pulse orange" /><div><strong>Flanco nororiental</strong><small>Última lectura · 21 min</small></div><span className="chevron">›</span></div>
-        <div className="sidebar-footer"><button className="help-button" onClick={() => notify('Centro de ayuda: documentación en preparación')}><span>?</span>Centro de ayuda</button><div className="profile"><div className="avatar">MR</div><div><strong>María Rojas</strong><small>Analista geotécnica</small></div><span>⌄</span></div></div>
-      </aside>
+        <span className="edition">CUADERNO DE CAMPO / 01</span>
+      </header>
 
-      <main className="main-content">
-        <header className="topbar"><div className="breadcrumbs"><span>PROYECTOS</span><b>/</b><strong>COTOPAXI · ECUADOR</strong><i>•</i><span className="live-label"><em /> EN VIVO</span></div><div className="top-actions"><button onClick={() => notify('No hay nuevas notificaciones')} className="notification" aria-label="Notificaciones">♢<span /></button><button className="export-button" onClick={() => notify('Reporte preparado para exportación')}><Icon>↥</Icon> Exportar reporte</button></div></header>
-        <section className="page-heading"><div><p className="eyebrow">CENTRO DE INTELIGENCIA GEOESPACIAL</p><h1>Diagnóstico <span>geotécnico</span></h1><p className="subtitle">Correlación satelital para protección civil y evaluación estructural.</p></div><div className="freshness"><span className="fresh-dot" />Datos actualizados <strong>hace 14 min</strong><button onClick={() => notify('Sincronizando MODIS y Sentinel-1...')}>↻</button></div></section>
-
-        <section className="metrics-grid">
-          <Metric label="Índice de riesgo" value="72.4" unit="/ 100" delta="↑ 8.6%" note="vs. periodo anterior" tone="purple" chart="risk" />
-          <Metric label="Desplazamiento máximo" value="18.4" unit="mm" delta="↑ 3.2 mm" note="últimos 30 días" tone="orange" chart="displacement" />
-          <Metric label="Anomalía térmica" value="4.8" unit="°C" delta="↑ 1.1 °C" note="sobre línea base" tone="pink" chart="thermal" />
-          <Metric label="Zonas monitoreadas" value="03" unit="activas" delta="→ estable" note="en la región objetivo" tone="blue" chart="zones" />
-        </section>
-
-        <section className="analysis-layout">
-          <div className="map-card card">
-            <div className="card-header"><div><div className="section-kicker"><span className="kicker-line" /> MAPA DE CORRELACIÓN</div><h2>Polígonos de riesgo geotécnico</h2></div><div className="map-controls"><div className="period-selector">{['7D', '30D', '90D'].map((item) => <button key={item} className={period === item ? 'selected' : ''} onClick={() => setPeriod(item)}>{item}</button>)}</div><button className="square-button" onClick={() => notify('Vista centrada en Cotopaxi')}>⌖</button><button className="square-button" onClick={() => notify('Capas sincronizadas')}>☷</button></div></div>
-            <div className="map-body"><div className="map-toolbar"><span className="map-badge"><i /> Sentinel-1 + MODIS</span><span className="map-coordinates">0°41' S&nbsp;&nbsp; 78°26' W</span></div><div className="map-canvas"><div className="contours contour-one" /><div className="contours contour-two" /><div className="contours contour-three" /><div className="mountain"><span className="peak" /><span className="snow" /></div><div className="map-label volcano-label">COTOPAXI <small>5,897 m</small></div>{layers.risk && zones.map((zone) => <button key={zone.id} className={`risk-zone ${zone.level} ${activeZone.id === zone.id ? 'selected-zone' : ''}`} style={{ clipPath: `path('${zone.path}')` }} onClick={() => setActiveZone(zone)} aria-label={`Zona ${zone.id}: ${zone.name}`}><span /></button>)}{layers.thermal && <><div className="sensor heat h1" /><div className="sensor heat h2" /><div className="sensor heat h3" /></>}{layers.displacement && <><div className="sensor displacement d1" /><div className="sensor displacement d2" /><div className="sensor displacement d3" /></>}<div className="map-label north-label">N</div><div className="map-scale"><span /><small>0</small><small>2 km</small></div><div className="map-zoom"><button>+</button><button>−</button></div></div><div className="map-legend"><Legend color="critical" label="Crítico" /><Legend color="elevated" label="Elevado" /><Legend color="watch" label="Vigilancia" /><span className="legend-divider" /><Legend dot="thermal" label="Anomalía térmica" /><Legend dot="displacement" label="Desplazamiento" /></div></div>
+      <main id="contenido">
+        <section className="intro">
+          <div>
+            <p className="eyebrow">ECUADOR / OBSERVACIÓN DEL TERRITORIO</p>
+            <h1>
+              Leer el terreno.
+              <br />
+              <span>Entender sus señales.</span>
+            </h1>
+            <p className="intro-copy">
+              Una vista conjunta de temperatura, deformación y persistencia para
+              explorar la priorización geotécnica del Cotopaxi.
+            </p>
           </div>
-          <aside className="detail-panel card"><div className="detail-top"><div><div className="section-kicker"><span className="kicker-line" /> ZONA SELECCIONADA</div><h2>{activeZone.name}</h2><p>{activeZone.id} · Actualizado hace 14 min</p></div><span className={`risk-pill ${activeZone.level}`}>{activeZone.level === 'critical' ? 'CRÍTICO' : activeZone.level === 'elevated' ? 'ELEVADO' : 'VIGILANCIA'}</span></div><div className="risk-score"><div className="score-ring" style={{ '--score': `${activeZone.risk * 3.6}deg` }}><strong>{activeZone.risk}</strong><small>RIESGO</small></div><div><span>Índice compuesto</span><strong>{activeZone.risk >= 80 ? 'Intervención recomendada' : 'Revisión preventiva'}</strong><small>Basado en 3 vectores de datos</small></div></div><div className="detail-stats"><Stat label="Deformación" value={activeZone.displacement} unit="mm" trend="↑ 14.2%" /><Stat label="Anomalía térmica" value={activeZone.thermal} unit="°C" trend="↑ 8.7%" /><Stat label="Superficie afectada" value={activeZone.area} trend={activeZone.points + ' puntos'} /></div><div className="signal-block"><div className="signal-head"><strong>Señal de inestabilidad</strong><span>Alta confianza</span></div><div className="signal-bars">{[30,42,48,43,55,61,58,71,68,79,74,88,84,93].map((height, index) => <i key={index} style={{ height: `${height}%` }} />)}</div><div className="signal-labels"><span>01 JUN</span><span>15 JUN</span><span>30 JUN</span></div></div><button className="full-detail" onClick={() => notify(`Abriendo análisis completo de ${activeZone.id}`)}>Ver análisis completo <span>→</span></button></aside>
+          <div className="intro-aside">
+            <span className="demo-label">
+              <i /> DEMOSTRACIÓN SINTÉTICA
+            </span>
+            <p>
+              Un prototipo de investigación.
+              <br />
+              No es una alerta oficial.
+            </p>
+            <label className="export-scope">
+              Alcance de exportación
+              <select
+                value={exportScope}
+                onChange={(event) => setExportScope(event.target.value)}
+              >
+                <option value="all">Todas las zonas ({zones.length})</option>
+                <option value="visible">
+                  Zonas visibles ({visible.length})
+                </option>
+                <option value="selected">
+                  Zona seleccionada ({selectedId})
+                </option>
+              </select>
+            </label>
+            <button
+              className="button"
+              onClick={download}
+              disabled={exportScope === 'visible' && visible.length === 0}
+            >
+              Descargar GeoJSON <span aria-hidden="true">↓</span>
+            </button>
+            <small className="export-hint">
+              Incluye procedencia, pesos aplicados y campos para GIS.
+            </small>
+            {exportError && (
+              <p className="form-error" role="alert">
+                {exportError}
+              </p>
+            )}
+          </div>
         </section>
 
-        <section className="bottom-grid"><div className="activity-card card"><div className="card-header compact"><div><div className="section-kicker"><span className="kicker-line" /> ACTIVIDAD DEL SISTEMA</div><h2>Eventos recientes</h2></div><button className="text-button" onClick={() => notify('Mostrando historial completo')}>Ver historial <span>→</span></button></div><div className="events"><Event icon="△" color="red" title="Riesgo elevado detectado" desc="Zona Z-04 · Quebrada Yanasacha" time="Hace 14 min" /><Event icon="⌁" color="orange" title="Anomalía térmica confirmada" desc="MODIS Terra · 4.8 °C sobre línea base" time="Hace 2 h" /><Event icon="◌" color="purple" title="Nueva escena disponible" desc="Sentinel-1A · Órbita descendente" time="Hace 5 h" /></div></div><div className="layers-card card"><div className="card-header compact"><div><div className="section-kicker"><span className="kicker-line" /> CAPAS ACTIVAS</div><h2>Vectores de datos</h2></div><button className="settings-button" onClick={() => notify('Configuración de capas')} aria-label="Configurar capas">⚙</button></div><div className="layer-list"><LayerToggle name="Riesgo geotécnico" meta="Modelo correlativo · v1.4" color="purple" active={layers.risk} onClick={() => toggleLayer('risk')} /><LayerToggle name="Anomalía térmica" meta="MODIS / VIIRS · 1 km" color="orange" active={layers.thermal} onClick={() => toggleLayer('thermal')} /><LayerToggle name="Deformación InSAR" meta="Sentinel-1 · 14 mm/px" color="pink" active={layers.displacement} onClick={() => toggleLayer('displacement')} /></div></div></section>
-        <footer className="page-footer"><span><i className="secure-dot" /> SISTEMA OPERATIVO</span><span>NASA OPEN DATA · PROTOTIPO DE INVESTIGACIÓN</span><span>v0.8.2 <b>•</b> © 2026 URKUSAR</span></footer>
+        <section className="summary" aria-label="Resumen calculado">
+          <div>
+            <span>Zonas de estudio</span>
+            <strong>
+              {String(zones.length).padStart(2, '0')}
+              <small>polígonos</small>
+            </strong>
+          </div>
+          <div>
+            <span>Prioridad crítica</span>
+            <strong>
+              {String(criticalCount).padStart(2, '0')}
+              <small>con estos pesos</small>
+            </strong>
+          </div>
+          <div>
+            <span>Deformación máxima</span>
+            <strong>
+              {number(
+                Math.max(
+                  ...zones.map((z) => Math.abs(z.properties.displacementMm)),
+                ),
+              )}
+              <small>mm</small>
+            </strong>
+          </div>
+          <div>
+            <span>Fecha del fixture</span>
+            <strong className="summary-date">
+              {date(dataMetadata.observedAt)}
+              <small>sin monitoreo en vivo</small>
+            </strong>
+          </div>
+        </section>
+
+        <section id="analisis" className="analysis-section">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">01 / TERRITORIO</p>
+              <h2>Cotopaxi, en perspectiva.</h2>
+            </div>
+            <label className="filter">
+              Mostrar{' '}
+              <select
+                value={filter}
+                onChange={(event) => setFilter(event.target.value)}
+              >
+                <option value="all">Todas las zonas</option>
+                {Object.entries(levels).map(([key, label]) => (
+                  <option key={key} value={key}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <div className="analysis-grid">
+            <div className="map-panel">
+              <div className="map-toolbar">
+                <span>Polígonos de demostración</span>
+                <div
+                  className="segmented"
+                  role="group"
+                  aria-label="Variable del mapa"
+                >
+                  {[
+                    ['risk', 'Índice'],
+                    ['thermal', 'Térmica'],
+                    ['displacement', 'Deformación'],
+                  ].map(([key, title]) => (
+                    <button
+                      key={key}
+                      aria-pressed={layer === key}
+                      onClick={() => setLayer(key)}
+                    >
+                      {title}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <TerritoryMap
+                zones={zones}
+                visible={visible}
+                selectedId={selectedId}
+                onSelect={setSelectedId}
+                layer={layer}
+              />
+              <div className="map-caption">
+                <span>WGS84 · Longitud / latitud</span>
+                <span>Geometría ilustrativa, no delimitación oficial</span>
+              </div>
+              {visible.length === 0 && (
+                <p className="empty-state" role="status">
+                  No hay zonas para este nivel con los pesos actuales.
+                </p>
+              )}
+              <div className="zone-list" aria-label="Seleccionar zona">
+                {visible.map(({ id, properties }) => (
+                  <button
+                    className="zone-row"
+                    key={id}
+                    onClick={() => setSelectedId(id)}
+                    aria-pressed={selectedId === id}
+                  >
+                    <span className="zone-id">{id}</span>
+                    <span className="zone-name">
+                      {properties.name}
+                      <small>{levels[properties.level]}</small>
+                    </span>
+                    <span className={`zone-score ${properties.level}`}>
+                      {number(properties.risk)}
+                      <small>/100</small>
+                    </span>
+                    <span aria-hidden="true">↗</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <aside
+              className="zone-detail"
+              aria-label="Detalle de zona seleccionada"
+            >
+              <div className="detail-heading">
+                <p className="eyebrow">{selected.id} / ZONA SELECCIONADA</p>
+                <span className={`level-label ${p.level}`}>
+                  {levels[p.level]}
+                </span>
+              </div>
+              <h3>{p.name}</h3>
+              {!visible.some(({ id }) => id === selectedId) && (
+                <p className="muted">
+                  Esta selección está fuera del filtro actual.
+                </p>
+              )}
+              <div className="score">
+                <strong data-testid="selected-score">{number(p.risk)}</strong>
+                <span>
+                  / 100
+                  <br />
+                  índice de priorización
+                </span>
+              </div>
+              <p className="detail-intro">
+                Así se construye este resultado. Cada aporte corresponde al
+                valor normalizado multiplicado por su peso.
+              </p>
+              <div className="contributions">
+                {Object.entries(vectors).map(([key, vector]) => (
+                  <div className="contribution" key={key}>
+                    <div>
+                      <strong>{vector.label}</strong>
+                      <span>
+                        {number(p[vector.property])} {vector.unit}
+                      </span>
+                    </div>
+                    <div className="bar-track">
+                      <span
+                        style={{
+                          width: `${p.explanation.contributions[key]}%`,
+                        }}
+                      />
+                    </div>
+                    <div className="bar-caption">
+                      <span>
+                        Peso aplicado: {number(config.weights[key] * 100)}%
+                      </span>
+                      <span>
+                        {number(p.explanation.contributions[key], 2)} puntos
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <dl className="detail-meta">
+                <div>
+                  <dt>Confianza declarada</dt>
+                  <dd>{number(p.confidence * 100)}%</dd>
+                </div>
+                <div>
+                  <dt>Persistencia de entrada</dt>
+                  <dd>{p.persistenceDays} días</dd>
+                </div>
+                <div>
+                  <dt>Origen</dt>
+                  <dd>Fixture sintético</dd>
+                </div>
+              </dl>
+              <p className="footnote">
+                La confianza viene del fixture: no es una probabilidad de fallo
+                ni una estimación validada. La persistencia no se infiere de una
+                serie temporal en esta versión.
+              </p>
+              <button className="button report-button" onClick={openReport}>
+                Ver reporte de zona <span aria-hidden="true">↗</span>
+              </button>
+            </aside>
+          </div>
+        </section>
+
+        <section id="metodo" className="method-section">
+          <div className="method-copy">
+            <p className="eyebrow">02 / MODELO EXPLICABLE</p>
+            <h2>Sin cajas negras.</h2>
+            <p>
+              Un índice heurístico, no un modelo predictivo entrenado.
+              Normalizamos tres señales entre 0 y 1 y sumamos sus aportes
+              ponderados.
+            </p>
+            <div className="formula">Índice = 100 × Σ (señal × peso)</div>
+            <p className="footnote">
+              Saturación: térmica {config.normalizers.thermal} °C, magnitud de
+              deformación {config.normalizers.displacement} mm y persistencia{' '}
+              {config.normalizers.persistence} días. Valores negativos de
+              temperatura no aumentan el índice. Umbrales ilustrativos: elevado
+              ≥ {config.thresholds.elevated}, crítico ≥{' '}
+              {config.thresholds.critical}. No calibrados con eventos reales.
+            </p>
+          </div>
+          <form className="weights-form" onSubmit={recalculate}>
+            <h3>Explorar los pesos</h3>
+            <p>La suma debe ser 100%. Los cambios se aplican al recalcular.</p>
+            <div className="weight-inputs">
+              {Object.entries(vectors).map(([key, vector]) => (
+                <label key={key}>
+                  {vector.label}
+                  <span>
+                    <input
+                      type="number"
+                      min="0"
+                      max="100"
+                      step="1"
+                      required
+                      value={weights[key]}
+                      onChange={(event) =>
+                        setWeights({ ...weights, [key]: event.target.value })
+                      }
+                    />
+                    %
+                  </span>
+                </label>
+              ))}
+            </div>
+            <div className="form-actions">
+              <button className="button primary" type="submit">
+                Recalcular índice <span aria-hidden="true">↗</span>
+              </button>
+              <button className="text-button" type="button" onClick={reset}>
+                Restablecer
+              </button>
+            </div>
+            {error && (
+              <p className="form-error" role="alert">
+                {error}
+              </p>
+            )}
+            <p className="form-status" role="status">
+              {message}
+            </p>
+          </form>
+        </section>
+
+        <SourcePanel />
       </main>
-      {notice && <div className="toast">{notice}</div>}
-    </div>
+      <footer className="site-footer">
+        <span>
+          UrkuSAR <small>Investigación geoespacial</small>
+        </span>
+        <span>
+          Datos para preguntar mejor. No para sustituir el criterio técnico.
+        </span>
+      </footer>
+      <dialog
+        className="report-dialog"
+        ref={reportDialog}
+        aria-labelledby="report-title"
+        onClose={() => setReport(null)}
+      >
+        <div className="report-toolbar">
+          <div>
+            <p className="eyebrow">REPORTE / SNAPSHOT DEL ANÁLISIS</p>
+            <h2 id="report-title">
+              {report ? report.data.zone.properties.name : 'Reporte de zona'}
+            </h2>
+          </div>
+          <button
+            type="button"
+            className="text-button"
+            autoFocus
+            onClick={() => reportDialog.current.close()}
+          >
+            Cerrar reporte
+          </button>
+        </div>
+        {report && (
+          <>
+            <iframe
+              title="Contenido del reporte de zona"
+              srcDoc={report.html}
+              sandbox=""
+            />
+            <div className="report-download">
+              <p>
+                HTML autónomo, sin scripts. Abre el archivo descargado para
+                imprimirlo o guardarlo como PDF desde el navegador.
+              </p>
+              <button className="button primary" onClick={downloadReport}>
+                Descargar reporte HTML <span aria-hidden="true">↓</span>
+              </button>
+            </div>
+          </>
+        )}
+      </dialog>
+    </>
   )
 }
 
-function Metric({ label, value, unit, delta, note, tone, chart }) { return <div className="metric-card card"><div className="metric-title"><span>{label}</span><button aria-label={`Más información sobre ${label}`}>···</button></div><div className="metric-value">{value}<small>{unit}</small></div><div className={`metric-delta ${tone}`}><span>{delta}</span><small>{note}</small></div><div className={`mini-chart ${chart}`}>{[22,35,30,48,43,55,51,65,60,72,68,84].map((h, i) => <i key={i} style={{ height: `${h}%` }} />)}</div></div> }
-function Legend({ color, dot, label }) { return <span className="legend-item"><i className={color || dot} />{label}</span> }
-function Stat({ label, value, unit, trend }) { return <div><span>{label}</span><strong>{value} <small>{unit}</small></strong><em>{trend}</em></div> }
-function Event({ icon, color, title, desc, time }) { return <div className="event"><span className={`event-icon ${color}`}>{icon}</span><div><strong>{title}</strong><p>{desc}</p></div><time>{time}</time></div> }
-function LayerToggle({ name, meta, color, active, onClick }) { return <button className="layer-row" onClick={onClick}><span className={`layer-icon ${color}`}>{color === 'orange' ? '◒' : color === 'pink' ? '⌁' : '◇'}</span><span className="layer-copy"><strong>{name}</strong><small>{meta}</small></span><span className={`toggle ${active ? 'on' : ''}`}><i /></span></button> }
+function TerritoryMap({ zones, visible, selectedId, onSelect, layer }) {
+  const coordinates = zones.flatMap(({ geometry }) =>
+    geometry.coordinates.flat(),
+  )
+  const minX = Math.min(...coordinates.map(([x]) => x))
+  const maxX = Math.max(...coordinates.map(([x]) => x))
+  const minY = Math.min(...coordinates.map(([, y]) => y))
+  const maxY = Math.max(...coordinates.map(([, y]) => y))
+  const scale = Math.min(
+    500 / Math.max(maxX - minX, 0.001),
+    285 / Math.max(maxY - minY, 0.001),
+  )
+  const project = ([x, y]) => [
+    320 + (x - (minX + maxX) / 2) * scale,
+    195 - (y - (minY + maxY) / 2) * scale,
+  ]
+  return (
+    <svg
+      className="territory-map"
+      viewBox="0 0 640 400"
+      role="group"
+      aria-label="Mapa ilustrativo de las zonas de Cotopaxi"
+    >
+      <defs>
+        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path
+            d="M40 0H0V40"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.5"
+          />
+        </pattern>
+      </defs>
+      <rect width="640" height="400" fill="url(#grid)" className="map-grid" />
+      <text x="25" y="28" className="map-note">
+        COTOPAXI / ECUADOR
+      </text>
+      <path d="M600 58V25m-5 8 5-8 5 8" className="north-arrow" />
+      <text x="596" y="18" className="map-note">
+        N
+      </text>
+      {visible.map(({ id, geometry, properties }) => {
+        const outer = geometry.coordinates[0].slice(0, -1).map(project)
+        const center = [
+          outer.reduce((sum, [x]) => sum + x, 0) / outer.length,
+          outer.reduce((sum, [, y]) => sum + y, 0) / outer.length,
+        ]
+        const path = geometry.coordinates
+          .map(
+            (ring) =>
+              `M${ring.map((point) => project(point).join(',')).join('L')}Z`,
+          )
+          .join(' ')
+        const value =
+          layer === 'risk'
+            ? properties.risk
+            : properties[vectors[layer].property]
+        return (
+          <g
+            key={id}
+            role="button"
+            tabIndex={0}
+            aria-pressed={selectedId === id}
+            aria-label={`Seleccionar ${properties.name}, índice ${number(properties.risk)}`}
+            onClick={() => onSelect(id)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault()
+                onSelect(id)
+              }
+            }}
+            className={`map-zone ${properties.level} ${selectedId === id ? 'is-selected' : ''}`}
+          >
+            <path d={path} fillRule="evenodd" />
+            <text
+              x={center[0]}
+              y={center[1] - 4}
+              textAnchor="middle"
+              className="polygon-id"
+            >
+              {id}
+            </text>
+            <text
+              x={center[0]}
+              y={center[1] + 15}
+              textAnchor="middle"
+              className="polygon-value"
+            >
+              {number(value)} {layer === 'risk' ? '/100' : vectors[layer].unit}
+            </text>
+          </g>
+        )
+      })}
+      <text x="25" y="378" className="map-note">
+        {minX.toFixed(2)} / {minY.toFixed(2)}
+      </text>
+      <text x="615" y="378" textAnchor="end" className="map-note">
+        {maxX.toFixed(2)} / {maxY.toFixed(2)}
+      </text>
+    </svg>
+  )
+}
 
-createRoot(document.getElementById('root')).render(<StrictMode><App /></StrictMode>)
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)

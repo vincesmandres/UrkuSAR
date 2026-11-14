@@ -4,7 +4,7 @@
   "observedAt": "2026-11-12T17:54:00Z",
   "sources": {
     "thermal": { "provider": "MODIS / VIIRS", "resolution": "1 km", "unit": "°C", "status": "fixture" },
-    "displacement": { "provider": "Sentinel-1 / InSAR", "resolution": "14 mm/px", "unit": "mm", "status": "fixture" }
+    "displacement": { "provider": "Sentinel-1 / InSAR", "resolution": "No definida en el fixture", "unit": "mm", "status": "fixture" }
   },
   "observations": [
     { "zoneId": "Z-04", "date": "2026-11-12", "thermalAnomalyC": 4.8, "displacementMm": 18.4, "persistenceDays": 24, "confidence": 0.91 },

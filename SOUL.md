@@ -4,11 +4,11 @@
 Transformar datos espaciales abstractos y crudos en inteligencia de protección civil e ingeniería estructural accionable. No somos una app de mapas; somos un sistema de diagnóstico geotécnico.
 
 ## 2. La Estética (UI & Video Pitch)
-*   **Vibe General:** Cyberpunk analítico, Fintech moderno.
-*   **Paleta de Colores:** Minimalista y de alto contraste.
-    *   **Fondo:** Oscuros profundos (Deep Blacks / Charcoal).
-    *   **Acentos:** Tonos púrpuras y violetas intensos, con toques de neón para resaltar datos críticos y "Zonas de Falla".
-*   **Formato de Presentación:** Orientado a videos verticales cortos, dinámicos, de consumo rápido, similares a la estética de Reels o TikTok para startups financieras y cripto. Animaciones de gráficos fluidas y precisas.
+- **Dirección visual:** Minimalismo editorial, inspirado en un cuaderno de campo. Sustituye la estética cyberpunk inicial por decisión del producto.
+- **Paleta:** Fondo blanco cálido, texto carbón y acentos oliva. Terracota y ocre identifican niveles sin depender exclusivamente del color.
+- **Composición:** Espacio en blanco, líneas finas y jerarquía tipográfica. Sin brillos, gradientes ornamentales o gráficos sin datos.
+- **Interacción:** Controles funcionales, foco visible, navegación por teclado y adaptación a móvil. Respeto a movimiento reducido.
+- **Transparencia:** Etiquetas de demostración sintética y límites del modelo siempre visibles. Nunca simular una conexión en vivo.
 
 ## 3. El Lenguaje
 Técnico, directo y de ingeniería. Hablamos de "tolerancia de carga", "deformación milimétrica", "vectores de inestabilidad" y "viabilidad técnica".

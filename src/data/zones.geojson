@@ -8,14 +8,8 @@
       "id": "Z-04",
       "properties": {
         "name": "Quebrada Yanasacha",
-        "level": "critical",
-        "risk": 87,
-        "displacementMm": 18.4,
-        "thermalAnomalyC": 4.8,
         "areaKm2": 1.8,
-        "observationPoints": 12842,
-        "mapPath": "M 32 212 C 62 177 75 146 112 151 C 139 155 148 128 178 133 L 196 195 C 159 224 119 243 70 236 Z",
-        "mapCenter": [115, 184]
+        "observationPoints": 12842
       },
       "geometry": { "type": "Polygon", "coordinates": [[[-78.43, -0.64], [-78.40, -0.61], [-78.37, -0.63], [-78.39, -0.68], [-78.43, -0.64]]] }
     },
@@ -24,14 +18,8 @@
       "id": "Z-02",
       "properties": {
         "name": "Flanco nororiental",
-        "level": "elevated",
-        "risk": 64,
-        "displacementMm": 11.7,
-        "thermalAnomalyC": 2.6,
         "areaKm2": 3.2,
-        "observationPoints": 9401,
-        "mapPath": "M 195 88 C 233 70 280 79 307 111 L 278 169 C 244 156 215 158 196 133 Z",
-        "mapCenter": [248, 116]
+        "observationPoints": 9401
       },
       "geometry": { "type": "Polygon", "coordinates": [[[-78.35, -0.57], [-78.30, -0.58], [-78.28, -0.62], [-78.32, -0.66], [-78.36, -0.62], [-78.35, -0.57]]] }
     },
@@ -40,14 +28,8 @@
       "id": "Z-01",
       "properties": {
         "name": "Valle de Mulaló",
-        "level": "watch",
-        "risk": 38,
-        "displacementMm": 6.2,
-        "thermalAnomalyC": 1.1,
         "areaKm2": 4.7,
-        "observationPoints": 7210,
-        "mapPath": "M 72 247 C 112 238 159 226 195 196 L 241 220 C 211 262 163 277 101 275 Z",
-        "mapCenter": [151, 244]
+        "observationPoints": 7210
       },
       "geometry": { "type": "Polygon", "coordinates": [[[-78.46, -0.68], [-78.40, -0.67], [-78.35, -0.70], [-78.39, -0.74], [-78.46, -0.73], [-78.46, -0.68]]] }
     }
