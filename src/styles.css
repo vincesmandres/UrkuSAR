@@ -816,6 +816,19 @@ dd {
 .product-audit code {
   overflow-wrap: anywhere;
 }
+.series-selector {
+  margin: 20px 0 12px;
+  flex-wrap: wrap;
+}
+.series-selector select {
+  max-width: 100%;
+}
+.thermal-series table {
+  min-width: 510px;
+}
+.thermal-series .button {
+  margin-top: 12px;
+}
 .source-module {
   border-top: 1px solid var(--line);
   padding: 40px 0 55px;

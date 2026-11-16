@@ -74,3 +74,13 @@ La aplicación incluye una evidencia archivada, no un nuevo vector para `analyze
 Las fechas de esos productos no son compatibles y no hay línea base térmica ni referencia de fase validada. La salida `eligibleForRiskIndex: false` es una decisión deliberada, no un valor de riesgo cero. El script es un auditor de dos productos fijados, no un procesador genérico InSAR o un pipeline de series temporales listo para operar.
 
 `scripts/check-gis.py` obtiene cinco GeoJSON directamente del exportador JS y los abre con el driver GDAL/OGR. Verifica conteo, CRS, campos numéricos, extensión, igualdad de coordenadas y topología GEOS. No requiere GeoPandas ni un servidor GIS y forma parte de CI; la interfaz QGIS y evaluación experta no se simulan. Dependencias Python aisladas y fijadas en `scripts/requirements-gis.txt`.
+
+### 9. Referencia térmica temporal exploratoria
+
+`scripts/goes.py` centraliza la lectura CF de GOES-19 para la auditoría individual y la serie temporal. Comprueba metadatos de temperatura, escala/unidades, codificación DQF y geolocaliza centros dentro del BBOX. Conserva identidad de píxel y huella de la rejilla; los valores rechazados quedan nulos.
+
+`scripts/thermal_series.py` calcula mediana y MAD únicamente con días anteriores al periodo de análisis. Rechaza cambios de rejilla/centros, satélite, unidades, hora UTC, fechas duplicadas o días omitidos sin estado explícito. Requiere un mínimo fijado de observaciones válidas por píxel antes de restar la referencia. Las rachas por encima del umbral se cortan por huecos o rechazos de calidad; no representan persistencia continua no observada ni probabilidad de fallo.
+
+`scripts/audit-thermal-series.py` descubre una adquisición diaria GOES-19 LST a las 17:00 UTC, dentro de un protocolo fijado antes de inspeccionar resultados: referencia de 28 días, mínimo de 7 válidos y umbral ilustrativo de 2 °C. Verifica tamaño, ETag simple cuando aplica y SHA-256; el modo replay exige concordancia de configuración, manifiesto y resultados. Un error remoto se distingue de un archivo ausente; un cambio de metadatos o checksum falla sin sustituir datos.
+
+`src/data/thermal-series.json` archiva fuentes, método, coordenadas, disponibilidad y resultados. Los 41 archivos se recuperaron, pero solo hay un dato DQF=0 en la referencia y ninguno en análisis; no se estiman anomalías ni rachas. `eligibleForRiskIndex` sigue falso. `ThermalSeries.jsx` muestra esa evidencia de forma separada del modelo y permite descargarla. No se infieren desplazamientos desde coherencia ni se afirma que la coincidencia de fechas sea simultaneidad de observación.

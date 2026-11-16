@@ -98,6 +98,28 @@ En Linux usar `.venv-gis/bin/python`. `audit-products.py` descarga únicamente l
 
 Fuente LiCSAR: Lazecky, M.; Maghsoudi, Y. (2022), *LiCSAR interferometry products*, NERC EDS CEDA. [Registro y cita](https://catalogue.ceda.ac.uk/uuid/52cda2e0e6c04272ae15ac836c1e8493), consultado 2026-11-14. Licencia OGL-3. LiCSAR contains modified Copernicus Sentinel data 2025 analysed by COMET. LiCSAR uses JASMIN, the UK's collaborative data analysis environment. Los datos NOAA son abiertos; su uso no implica respaldo a UrkuSAR.
 
+### Serie térmica del periodo SAR
+
+En **Fuentes → Serie térmica alineada al periodo SAR** se muestra una segunda inspección, independiente del archivo térmico de noviembre de 2026:
+
+- Se recuperaron 41 NetCDF GOES-19 reales a las 17:00 UTC: 28 días de referencia (2025-04-28 a 2025-05-25) y 13 de análisis (2025-05-26 a 2025-06-07), coincidentes en calendario con el par LiCSAR. No se afirma simultaneidad de adquisición ni causalidad entre sensores.
+- El lector verifica satélite, unidades Kelvin, proyección CF, rejilla, fecha/hora y codificación DQF. Solo acepta valores finitos sin máscara con DQF=0. No se rellenan nubes ni se interpolan días.
+- Referencia por píxel: mediana de al menos 7 observaciones válidas anteriores. Se conserva la desviación absoluta mediana (MAD). La diferencia en Kelvin equivale numéricamente a diferencia en °C.
+- Se cuentan días observados consecutivos por encima de 2 °C; una ausencia o rechazo de calidad interrumpe la racha. El mínimo de muestras y el umbral son parámetros exploratorios, no calibrados. Una referencia de 28 días no es una climatología.
+- **Resultado real:** una sola observación válida en toda la ventana de referencia y ninguna en el periodo analizado, para cuatro píxeles de aproximadamente 10 km. Ningún píxel reúne referencia suficiente: anomalías y rachas permanecen `null`/«No estimable», no cero.
+- La interfaz permite elegir un píxel, inspeccionar cada día y descargar la serie con URLs, tamaños y SHA-256. No altera el índice sintético ni traslada una medición de 10 km a polígonos geotécnicos pequeños.
+
+Reproducir el resultado fijado, usando el mismo entorno GIS:
+
+```powershell
+.\.venv-gis\Scripts\python.exe -m unittest discover -s tests/python -p "test_*.py" -v
+.\.venv-gis\Scripts\python.exe scripts/audit-thermal-series.py --replay src/data/thermal-series.json
+```
+
+El modo `--replay` usa las URLs y hashes archivados y comprueba que los resultados coincidan, salvo la fecha de ejecución. Usa `.data-cache/thermal-series/`; si falta un archivo lo descarga y verifica. Sin `--replay`, el script consulta el catálogo S3 y puede regenerar el JSON con `--output src/data/thermal-series.json`. Hay límites de 62 archivos y 4 MiB por archivo; no se descargan productos grandes ni se cambia el protocolo para forzar resultados. Las pruebas Python de CI son sintéticas y sin red; la evidencia publicada proviene de los archivos reales descargados.
+
+El siguiente paso científico ya no es programar la mediana: es conseguir observaciones térmicas con cobertura/QA suficientes y resolución adecuada, además de desplazamiento LOS validado. Este protocolo no permite atribuir a actividad volcánica cualquier calentamiento meteorológico o estacional.
+
 ## Reportes y exportación
 
 1. Seleccionar una zona en el mapa o la lista. Los filtros de nivel controlan las zonas visibles; no cambian la selección automáticamente.
@@ -154,7 +176,7 @@ Si falla la red durante el pitch, continuar con la demo ya cargada. La caché de
 
 ## Checklist de entrega
 
-- Ejecutar `npm ci`, instalar Chromium/Firefox/WebKit y completar `npm run check` sin fallos, además de `scripts/check-gis.py` en el entorno GIS.
+- Ejecutar `npm ci`, instalar Chromium/Firefox/WebKit y completar `npm run check` sin fallos, además de `scripts/check-gis.py` y la suite `tests/python` en el entorno GIS.
 - Revisar las capturas de escritorio/móvil y los resultados axe; no ignorar advertencias `incomplete` sin revisión.
 - Confirmar etiquetas sintéticas, valores iniciales Z-04=91 y separación entre catálogo e índice.
 - Probar selección, filtros, recálculo, exportación de subconjuntos y reporte descargado.

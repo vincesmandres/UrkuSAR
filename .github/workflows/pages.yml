@@ -53,6 +53,7 @@ jobs:
       - run: >-
           python -m pip install --only-binary=:all: -r scripts/requirements-gis.txt
       - run: python scripts/check-gis.py
+      - run: python -m unittest discover -s tests/python -p "test_*.py" -v
   deploy:
     needs: [build, gis]
     runs-on: ubuntu-latest

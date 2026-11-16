@@ -1,5 +1,43 @@
 import { test, expect } from '@playwright/test'
 
+test('inspects and downloads a quality-limited thermal series without changing the risk index', async ({
+  page,
+}) => {
+  await page.goto('/')
+  await page
+    .getByText('Serie térmica alineada al periodo SAR', { exact: true })
+    .click()
+  await expect(page.getByTestId('thermal-series-result')).toContainText(
+    '0 comparaciones estimables',
+  )
+  await page
+    .getByRole('combobox', { name: 'Píxel de la serie' })
+    .selectOption('549:506')
+  await expect(
+    page.getByRole('table', { name: 'Serie diaria de 549:506 · 17:00 UTC' }),
+  ).toBeVisible()
+  await expect(
+    page
+      .getByRole('region', { name: 'Observaciones térmicas diarias' })
+      .getByRole('cell', { name: 'No estimable', exact: true }),
+  ).toHaveCount(13)
+  await expect(page.getByTestId('selected-score')).toHaveText('91')
+  const pending = page.waitForEvent('download')
+  await page.getByRole('link', { name: 'Descargar serie y manifiesto' }).click()
+  const stream = await (await pending).createReadStream()
+  const chunks = []
+  for await (const chunk of stream) chunks.push(chunk)
+  const data = JSON.parse(Buffer.concat(chunks).toString())
+  expect(data.sources).toHaveLength(41)
+  expect(data.method.hourUTC).toBe(17)
+  expect(data.eligibleForRiskIndex).toBe(false)
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true)
+})
+
 test('shows archived raster evidence without treating it as a real risk score', async ({
   page,
 }) => {

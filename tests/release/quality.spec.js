@@ -56,6 +56,9 @@ test('production loads under the Pages path without asset errors or automatic ex
       { exact: true },
     )
     .click()
+  await page
+    .getByText('Serie térmica alineada al periodo SAR', { exact: true })
+    .click()
   await audit(page, testInfo, 'production-home')
   expect(errors).toEqual([])
   expect(failures).toEqual([])

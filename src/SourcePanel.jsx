@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import productAudit from './data/product-audit.json'
+import ThermalSeries from './ThermalSeries.jsx'
 import {
   DEFAULT_QUERY,
   SOURCES,
@@ -400,6 +401,8 @@ export default function SourcePanel() {
           ))}
         </ul>
       </details>
+
+      <ThermalSeries />
 
       <div className="import-heading">
         <h3>Incorporar observaciones</h3>

@@ -106,6 +106,15 @@ Este plan ordena la construcción del MVP desde la demo actual hasta un prototip
 - NOAA GOES-19 LST del 2026-11-14: 4 centros de píxel en el área, 0 con DQF=0. Se conservan nulos para temperatura y anomalía; no se imputan ceros.
 - No hay correspondencia temporal ni línea base. El cierre científico sigue bloqueado y la app lo comunica, en lugar de presentar el fixture como observación real.
 
+**Avance posterior: serie térmica con fechas coincidentes**
+
+- Se adquirieron 41 archivos GOES-19 a las 17:00 UTC: 28 días anteriores y los 13 días del par SAR 2025-05-26/2025-06-07. El manifiesto versionado permite reproducir URLs, hashes y resultados sin seleccionar datos a posteriori.
+- Se implementó referencia por píxel (mediana/MAD), mínimo de días válidos, diferencias térmicas y rachas observadas; se validan rejilla, hora, unidades, cobertura y DQF. La auditoría individual y la serie comparten el lector CF.
+- La recuperación fue completa, pero hubo solo un dato de referencia de calidad suficiente y ninguno durante el análisis. No se redujeron umbrales de QA para forzar un resultado. La interfaz muestra «No estimable» y conserva nulos; el índice sintético permanece intacto.
+- La coincidencia de fechas resuelve una limitación del par de archivos anterior, no el cierre científico: faltan una referencia térmica utilizable, un producto LOS validado y revisión profesional. El protocolo a 10 km no resuelve los polígonos pequeños del dashboard.
+- Pruebas añadidas: 17 Python para cálculo temporal y lectura CF, comprobación del archivo de evidencia, selector/descarga y accesibilidad de la nueva vista. Reproducción de los 41 archivos verificada por checksum y comparación de resultados.
+- Validación local de esta ampliación: 65 pruebas unitarias JavaScript, 60 funcionales y 24 de producción en la matriz de navegadores, más las 17 pruebas Python y replay de los archivos reales. El workflow incorpora las pruebas Python sin descargar datos remotos en CI. Estos cambios aún requieren commit/push antes de actualizar la web pública.
+
 ## Hito 4 · Exportación y revisión geotécnica
 
 **Estado:** exportación y reportes implementados; revisión en QGIS y aprobación geotécnica pendientes
@@ -179,7 +188,7 @@ Este plan ordena la construcción del MVP desde la demo actual hasta un prototip
 ## Orden de trabajo inmediato
 
 1. Obtener y validar productos térmicos y LOS compatibles para cerrar el Hito 3; no convertir metadatos de catálogo en mediciones.
-2. Definir alineación temporal/espacial, línea base térmica y persistencia a partir de series, sin confundir confianza con probabilidad de fallo.
+2. Conseguir observaciones térmicas con cobertura y calidad suficientes para el protocolo temporal implementado; la primera serie de 41 archivos no permite estimar anomalías. Revisar resolución y método con criterio científico, sin relajar QA ni confundir confianza con probabilidad de fallo.
 3. Completar revisión manual del Hito 4 en QGIS y evaluación de supuestos con un especialista; los reportes y las exportaciones ya están implementados.
 4. Mantener la publicación en GitHub Pages con gates de pruebas y GIS; el Hito 5 inicial ya está publicado y se verifica cada nueva ejecución antes de afirmar un despliegue.
 5. Ensayar el guion y completar las revisiones manuales de accesibilidad y GIS; priorizar la validación de datos sobre añadir nuevas funciones decorativas.

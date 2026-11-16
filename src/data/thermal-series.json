@@ -1,0 +1,831 @@
+{
+  "method": {
+    "baselineStart": "2025-04-28",
+    "baselineEnd": "2025-05-25",
+    "periodStart": "2025-05-26",
+    "periodEnd": "2025-06-07",
+    "hourUTC": 17,
+    "minimumBaselineDays": 7,
+    "thresholdC": 2.0,
+    "reference": "Within-pixel median of earlier DQF=0 observations at the same UTC hour; not a climatology",
+    "persistence": "Consecutive observed days strictly above the illustrative threshold; missing/rejected days break the run"
+  },
+  "gridSignature": "98f1515751fa15f6d0708de3b4368982287d1705a74772d19d7c61fb398d3619",
+  "pixelCount": 4,
+  "baselineEligiblePixels": 0,
+  "comparedObservations": 0,
+  "pixels": [
+    {
+      "id": "549:505",
+      "latitude": -0.5892239258972322,
+      "longitude": -78.37878600694778,
+      "baselineValidDays": 0,
+      "baselineMedianK": null,
+      "baselineMadK": null,
+      "baselineStatus": "insufficient-data",
+      "analysisValidDays": 0,
+      "comparedDays": 0,
+      "aboveThresholdDays": null,
+      "longestObservedRunDays": null,
+      "observations": [
+        {
+          "date": "2025-05-26",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-05-27",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-05-28",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-05-29",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-05-30",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-05-31",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-01",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-02",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-03",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-04",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-05",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-06",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-07",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        }
+      ]
+    },
+    {
+      "id": "549:506",
+      "latitude": -0.5892143087773362,
+      "longitude": -78.28852668308444,
+      "baselineValidDays": 1,
+      "baselineMedianK": null,
+      "baselineMadK": null,
+      "baselineStatus": "insufficient-data",
+      "analysisValidDays": 0,
+      "comparedDays": 0,
+      "aboveThresholdDays": null,
+      "longestObservedRunDays": null,
+      "observations": [
+        {
+          "date": "2025-05-26",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-05-27",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-05-28",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-05-29",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-05-30",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-05-31",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-01",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-02",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-03",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-04",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-05",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-06",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-07",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        }
+      ]
+    },
+    {
+      "id": "550:505",
+      "latitude": -0.679877045619796,
+      "longitude": -78.37885726043639,
+      "baselineValidDays": 0,
+      "baselineMedianK": null,
+      "baselineMadK": null,
+      "baselineStatus": "insufficient-data",
+      "analysisValidDays": 0,
+      "comparedDays": 0,
+      "aboveThresholdDays": null,
+      "longestObservedRunDays": null,
+      "observations": [
+        {
+          "date": "2025-05-26",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-05-27",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-05-28",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-05-29",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-05-30",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-05-31",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-01",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-02",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-03",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-04",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-05",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-06",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-07",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        }
+      ]
+    },
+    {
+      "id": "550:506",
+      "latitude": -0.6798659484525926,
+      "longitude": -78.28859602552515,
+      "baselineValidDays": 0,
+      "baselineMedianK": null,
+      "baselineMadK": null,
+      "baselineStatus": "insufficient-data",
+      "analysisValidDays": 0,
+      "comparedDays": 0,
+      "aboveThresholdDays": null,
+      "longestObservedRunDays": null,
+      "observations": [
+        {
+          "date": "2025-05-26",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-05-27",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-05-28",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-05-29",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-05-30",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-05-31",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-01",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-02",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-03",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-04",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-05",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-06",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        },
+        {
+          "date": "2025-06-07",
+          "temperatureK": null,
+          "anomalyC": null,
+          "status": "quality-rejected"
+        }
+      ]
+    }
+  ],
+  "eligibleForRiskIndex": false,
+  "schemaVersion": "1.0.0",
+  "checkedAt": "2026-11-14T19:26:17.290Z",
+  "bbox": [
+    -78.46,
+    -0.74,
+    -78.28,
+    -0.57
+  ],
+  "platform": "NOAA GOES-19",
+  "product": "ABI-L2-LSTF",
+  "spatialResolution": "10.0km at nadir",
+  "sources": [
+    {
+      "date": "2025-04-28",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/118/17/OR_ABI-L2-LSTF-M6_G19_s20251181700205_e20251181709513_c20251181714529.nc",
+      "bytes": 703372,
+      "etag": "5339861760a3da60fdfacc43a74f83bc",
+      "sha256": "a35f5844ff4dbc394d5960411e05b4b8fdbeb21ad37f18b97be209151c6088b7",
+      "acquiredAt": "2025-04-28T17:00:20.5Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-04-29",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/119/17/OR_ABI-L2-LSTF-M6_G19_s20251191700206_e20251191709514_c20251191714383.nc",
+      "bytes": 710938,
+      "etag": "00cf8e7ed0c9ba90def34438ccf354e9",
+      "sha256": "036a84daa87421c66289e5b24a604eb67d017248b3235d4619c55246750694c9",
+      "acquiredAt": "2025-04-29T17:00:20.6Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-04-30",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/120/17/OR_ABI-L2-LSTF-M6_G19_s20251201700207_e20251201709515_c20251201714296.nc",
+      "bytes": 717375,
+      "etag": "98641dce2ffdbd1d2d9f34d970feee81",
+      "sha256": "7fe9a91dc34a0d256119497583b31b1d5153d257ce104f7e4861e53f58baf2a5",
+      "acquiredAt": "2025-04-30T17:00:20.7Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-01",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/121/17/OR_ABI-L2-LSTF-M6_G19_s20251211700208_e20251211709516_c20251211714428.nc",
+      "bytes": 717006,
+      "etag": "05a9dad60b7c8b3747385c8fa8c0d15f",
+      "sha256": "90ef6ba6ffab223912a88d93ce761cb65256034dfb74242fb753345c48b530c7",
+      "acquiredAt": "2025-05-01T17:00:20.8Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-02",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/122/17/OR_ABI-L2-LSTF-M6_G19_s20251221700209_e20251221709517_c20251221714522.nc",
+      "bytes": 728992,
+      "etag": "a703bd6ddd7b600a13854c58dcfb16fe",
+      "sha256": "9a869461f8b2de29cc0489432f5a621f2f818681643c2183a064ea15c4fac22b",
+      "acquiredAt": "2025-05-02T17:00:20.9Z",
+      "highQualityPixels": 1
+    },
+    {
+      "date": "2025-05-03",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/123/17/OR_ABI-L2-LSTF-M6_G19_s20251231700210_e20251231709518_c20251231714580.nc",
+      "bytes": 712908,
+      "etag": "43f111ea34f774de1270ef9fd7fe44ea",
+      "sha256": "8c89940bbba2eb038b09501aef7dbf4aa8c4df6bd9071f7a5e83face235e2adc",
+      "acquiredAt": "2025-05-03T17:00:21.0Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-04",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/124/17/OR_ABI-L2-LSTF-M6_G19_s20251241700211_e20251241709519_c20251241714444.nc",
+      "bytes": 722026,
+      "etag": "555aa1ab99b40a644bde6751cd88701b",
+      "sha256": "10fbe6a9434bf1832f7086cb5615e3ea624e6f1501628933ed4aa0f9f856522f",
+      "acquiredAt": "2025-05-04T17:00:21.1Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-05",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/125/17/OR_ABI-L2-LSTF-M6_G19_s20251251700212_e20251251709520_c20251251715037.nc",
+      "bytes": 745350,
+      "etag": "5167a1cf9af0fa0c954953a59c09e9de",
+      "sha256": "ac4f9f43ab18e09992e356ccc1e75036e805ce9984798abedaf5872ff3039b04",
+      "acquiredAt": "2025-05-05T17:00:21.2Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-06",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/126/17/OR_ABI-L2-LSTF-M6_G19_s20251261700203_e20251261709511_c20251261716002.nc",
+      "bytes": 733655,
+      "etag": "8e2a5c1ed557c07d1c92753ea307915e",
+      "sha256": "188ab39e7d6b02088d592d3c065ab33341e1bb4d147e41c2764601288c8c788d",
+      "acquiredAt": "2025-05-06T17:00:20.3Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-07",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/127/17/OR_ABI-L2-LSTF-M6_G19_s20251271700204_e20251271709511_c20251271715027.nc",
+      "bytes": 729505,
+      "etag": "dda1d80ec0ca70b5a5997fcf945bb90f",
+      "sha256": "2c1d162344639cbd5c7612fbdfafa4a370144a943b9159ac37e756d55d3d75d6",
+      "acquiredAt": "2025-05-07T17:00:20.4Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-08",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/128/17/OR_ABI-L2-LSTF-M6_G19_s20251281700204_e20251281709513_c20251281714587.nc",
+      "bytes": 771697,
+      "etag": "7b37c9484d2eb392cc0c87a7a1a79e18",
+      "sha256": "36ac466ccf498ca862a7a438bea60cec547b8cb3bcd76b9d2ce891500ede0950",
+      "acquiredAt": "2025-05-08T17:00:20.4Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-09",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/129/17/OR_ABI-L2-LSTF-M6_G19_s20251291700205_e20251291709513_c20251291715000.nc",
+      "bytes": 770827,
+      "etag": "eaf37ac2ea12ecc70159c8dd9e627d7e",
+      "sha256": "39263bec269ef6010d091e70453e796b4c7073309d7e101e7cd7f6d803d60095",
+      "acquiredAt": "2025-05-09T17:00:20.5Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-10",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/130/17/OR_ABI-L2-LSTF-M6_G19_s20251301700206_e20251301709514_c20251301714536.nc",
+      "bytes": 744003,
+      "etag": "ea608a34d617f03e3ee47a131b01ba51",
+      "sha256": "9f240caf44d76f007eb6b0239b2c29746c420a71e264fda99ab30355d314e5d2",
+      "acquiredAt": "2025-05-10T17:00:20.6Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-11",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/131/17/OR_ABI-L2-LSTF-M6_G19_s20251311700207_e20251311709515_c20251311715087.nc",
+      "bytes": 714817,
+      "etag": "89afb66f5fa52d8474590f131dae7610",
+      "sha256": "016feb90d4743ab4d20d8c89c91f0395ebd18b09362462d37cd23390bbd6bb17",
+      "acquiredAt": "2025-05-11T17:00:20.7Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-12",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/132/17/OR_ABI-L2-LSTF-M6_G19_s20251321700208_e20251321709516_c20251321714454.nc",
+      "bytes": 721695,
+      "etag": "b5d9acc79cc024ae11de4b1900a09a7c",
+      "sha256": "55bea4290df707983b8aac5ba562d133534ada336f33001f17c10eb077f0167b",
+      "acquiredAt": "2025-05-12T17:00:20.8Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-13",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/133/17/OR_ABI-L2-LSTF-M6_G19_s20251331700209_e20251331709517_c20251331714542.nc",
+      "bytes": 716014,
+      "etag": "ea05b1f50dfc8b1f52e8d2750584a69d",
+      "sha256": "b943bc457e18642bc6d7fd1b0d676fd6c658fbaeed96b0acafd99977c558a532",
+      "acquiredAt": "2025-05-13T17:00:20.9Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-14",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/134/17/OR_ABI-L2-LSTF-M6_G19_s20251341700210_e20251341709518_c20251341714369.nc",
+      "bytes": 708388,
+      "etag": "56c8a79ffa320d1d2b179c98363911f1",
+      "sha256": "c2cc93523eb5ac561e36f073e692ad5da6b2f11cdded647c86c3fd2ff834cea7",
+      "acquiredAt": "2025-05-14T17:00:21.0Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-15",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/135/17/OR_ABI-L2-LSTF-M6_G19_s20251351700211_e20251351709519_c20251351714413.nc",
+      "bytes": 705761,
+      "etag": "db7657e750fec70f9ab2faa99942d4f8",
+      "sha256": "9ceda8d983d37d915f4758af9026e57be4620ec8c876436059f9d6f5efa59e0c",
+      "acquiredAt": "2025-05-15T17:00:21.1Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-16",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/136/17/OR_ABI-L2-LSTF-M6_G19_s20251361700212_e20251361709520_c20251361714528.nc",
+      "bytes": 695999,
+      "etag": "cb66d0bd1c0c28981ac08cc65611f46c",
+      "sha256": "935a2ec7c2349fb9f9577c4d46328a3548c2e2d51d83f4c1760355299b364239",
+      "acquiredAt": "2025-05-16T17:00:21.2Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-17",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/137/17/OR_ABI-L2-LSTF-M6_G19_s20251371700213_e20251371709521_c20251371714462.nc",
+      "bytes": 687669,
+      "etag": "288a6ec4c4834f94c875175796a779eb",
+      "sha256": "f72ec0555409c2e86e2901a1dfd5246bca271ab5a9332221cbfc9a0ec017d0d8",
+      "acquiredAt": "2025-05-17T17:00:21.3Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-18",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/138/17/OR_ABI-L2-LSTF-M6_G19_s20251381700203_e20251381709511_c20251381714556.nc",
+      "bytes": 702796,
+      "etag": "290cf5a9ed2413e7502894aaaa71d584",
+      "sha256": "43bd48a37385ada83659b728c8cead01fb498b753060db1b18f37a829db7a75e",
+      "acquiredAt": "2025-05-18T17:00:20.3Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-19",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/139/17/OR_ABI-L2-LSTF-M6_G19_s20251391700203_e20251391709512_c20251391714523.nc",
+      "bytes": 724413,
+      "etag": "23ec4fd0f12837f9f872c6eff270c88e",
+      "sha256": "15462def53202b354cf178c0615cf2fddaae6f8a8e768f9cd2f8837e2c66e6ac",
+      "acquiredAt": "2025-05-19T17:00:20.3Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-20",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/140/17/OR_ABI-L2-LSTF-M6_G19_s20251401700204_e20251401709512_c20251401715019.nc",
+      "bytes": 719308,
+      "etag": "a5e9cfda1c5b8434183faeb2905598ba",
+      "sha256": "0072ae2da02f90eae32844ccc9764a5d24aa4fbdaaf5313c1c7f54f0f935fc8f",
+      "acquiredAt": "2025-05-20T17:00:20.4Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-21",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/141/17/OR_ABI-L2-LSTF-M6_G19_s20251411700205_e20251411709513_c20251411714529.nc",
+      "bytes": 735860,
+      "etag": "e7806198f214d1e74ea9d69bf82c27d1",
+      "sha256": "a26e561a1e3b9c587b6665c97d8a068cc04c26823e7c16329c597e1f21073846",
+      "acquiredAt": "2025-05-21T17:00:20.5Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-22",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/142/17/OR_ABI-L2-LSTF-M6_G19_s20251421700206_e20251421709515_c20251421714535.nc",
+      "bytes": 734226,
+      "etag": "aa89d2fbfab3e5bb6e2ad290d0c84f14",
+      "sha256": "d267d9fbfacd014e63d44bb77e15bb8bad134e62ef40abd9f8583a83df3271cf",
+      "acquiredAt": "2025-05-22T17:00:20.6Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-23",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/143/17/OR_ABI-L2-LSTF-M6_G19_s20251431700207_e20251431709515_c20251431714392.nc",
+      "bytes": 751517,
+      "etag": "c929c2bd2c1b8c2ecc22600ff21d4b0c",
+      "sha256": "9e743555087edb21904b6918f951c7aca01a7c445a8286847df42100c0236e37",
+      "acquiredAt": "2025-05-23T17:00:20.7Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-24",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/144/17/OR_ABI-L2-LSTF-M6_G19_s20251441700208_e20251441709516_c20251441714405.nc",
+      "bytes": 729746,
+      "etag": "a02f6489aaf1efa369574bd25a38e051",
+      "sha256": "af8239ec9f10444e711e39d44fc06b645dc4d1d4e588ae1f0ceac859415c2003",
+      "acquiredAt": "2025-05-24T17:00:20.8Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-25",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/145/17/OR_ABI-L2-LSTF-M6_G19_s20251451700209_e20251451709517_c20251451714570.nc",
+      "bytes": 718972,
+      "etag": "0959fa1665bc0f0ce6c12ec16c117337",
+      "sha256": "369fac033c53062472d86c9f707d9ac341e8d8dd82a85d7fe78c61632e627786",
+      "acquiredAt": "2025-05-25T17:00:20.9Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-26",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/146/17/OR_ABI-L2-LSTF-M6_G19_s20251461700210_e20251461709518_c20251461714564.nc",
+      "bytes": 711006,
+      "etag": "28457d0dd20a75ed557e1e08c5e558ad",
+      "sha256": "e9761e39dcb232516d09d5eb64e95806e28a955b09ae0b9c1e6074409f7451fc",
+      "acquiredAt": "2025-05-26T17:00:21.0Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-27",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/147/17/OR_ABI-L2-LSTF-M6_G19_s20251471700211_e20251471709519_c20251471714420.nc",
+      "bytes": 704786,
+      "etag": "af2b3b1571d6bba94b05209e561b1d22",
+      "sha256": "4f043dbf6bf02bf1bebac03e73163ed168c74d969274b60c59d1121c1e9d9612",
+      "acquiredAt": "2025-05-27T17:00:21.1Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-28",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/148/17/OR_ABI-L2-LSTF-M6_G19_s20251481700212_e20251481709520_c20251481714454.nc",
+      "bytes": 723215,
+      "etag": "89df8c8f3f518c798953355829c6edb4",
+      "sha256": "12e7303dd830b8ba93b8d993b1f7952e13d3a09d0a5bde141761b7a095cf3e9d",
+      "acquiredAt": "2025-05-28T17:00:21.2Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-29",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/149/17/OR_ABI-L2-LSTF-M6_G19_s20251491700213_e20251491709521_c20251491714409.nc",
+      "bytes": 712639,
+      "etag": "b4534f0183c3ac6482d952c70cfac63e",
+      "sha256": "8337b60d4b375f40635f68c1d8b1d9acc12d2d389d31b00dee0b712cf7b994d0",
+      "acquiredAt": "2025-05-29T17:00:21.3Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-30",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/150/17/OR_ABI-L2-LSTF-M6_G19_s20251501700214_e20251501709522_c20251501714575.nc",
+      "bytes": 716934,
+      "etag": "bb834782e60315e3abf22bd1ac732a27",
+      "sha256": "f7ebafb2aa2bdaeb118e8dfb9fe345f8a10fc8ba61e72329eb33557c2548521c",
+      "acquiredAt": "2025-05-30T17:00:21.4Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-05-31",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/151/17/OR_ABI-L2-LSTF-M6_G19_s20251511700203_e20251511709511_c20251511714498.nc",
+      "bytes": 703736,
+      "etag": "10c34173ab8650369bc52de556c35464",
+      "sha256": "9565774dff1019832dcccfbd1fcab22f5d25cada3e1d4472142fc09e5e36cb50",
+      "acquiredAt": "2025-05-31T17:00:20.3Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-06-01",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/152/17/OR_ABI-L2-LSTF-M6_G19_s20251521700204_e20251521709512_c20251521714524.nc",
+      "bytes": 733396,
+      "etag": "58c8e1c070ebcd9922d32eb23cd91ee2",
+      "sha256": "fb6905f6afeba833717d24e9f4782ee0a6707db05264c767276c94effbadb1cb",
+      "acquiredAt": "2025-06-01T17:00:20.4Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-06-02",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/153/17/OR_ABI-L2-LSTF-M6_G19_s20251531700204_e20251531709513_c20251531715086.nc",
+      "bytes": 735740,
+      "etag": "47b6f09d104a77c28d2a718adb3950a2",
+      "sha256": "e99c2a5306b65bc1cc938183bd7994b40cb2cc53b7eff9c7c2641986fc51a547",
+      "acquiredAt": "2025-06-02T17:00:20.4Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-06-03",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/154/17/OR_ABI-L2-LSTF-M6_G19_s20251541700205_e20251541709514_c20251541714483.nc",
+      "bytes": 729999,
+      "etag": "ab107ac65a909925814af20d17a67abd",
+      "sha256": "fe5ab7bfed4edaead9280c8069f442493cf1436ef1c50d9d4cfeebcabe7962ad",
+      "acquiredAt": "2025-06-03T17:00:20.5Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-06-04",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/155/17/OR_ABI-L2-LSTF-M6_G19_s20251551700206_e20251551709515_c20251551715041.nc",
+      "bytes": 737079,
+      "etag": "7a088b778954ed5dc699d6b89518ffa4",
+      "sha256": "2ebb8103ea027915cebef29f3a630cdafcbcf48d03867af9b0cf644271a91bef",
+      "acquiredAt": "2025-06-04T17:00:20.6Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-06-05",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/156/17/OR_ABI-L2-LSTF-M6_G19_s20251561700207_e20251561709515_c20251561714585.nc",
+      "bytes": 745050,
+      "etag": "38c7ed522f6a6de84aca239d6ecd142c",
+      "sha256": "12609788303664e2634b621ec5f95baa79cebd68faf21f4a4523de24a2fe7101",
+      "acquiredAt": "2025-06-05T17:00:20.7Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-06-06",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/157/17/OR_ABI-L2-LSTF-M6_G19_s20251571700208_e20251571709516_c20251571714449.nc",
+      "bytes": 727268,
+      "etag": "bc347075add87f82c1085f0df73f6d68",
+      "sha256": "927d924722c9525b1efd5242ec47958862ca0199356e2ea85ae51448452d6ee3",
+      "acquiredAt": "2025-06-06T17:00:20.8Z",
+      "highQualityPixels": 0
+    },
+    {
+      "date": "2025-06-07",
+      "status": "available",
+      "url": "https://noaa-goes19.s3.amazonaws.com/ABI-L2-LSTF/2025/158/17/OR_ABI-L2-LSTF-M6_G19_s20251581700209_e20251581709517_c20251581715017.nc",
+      "bytes": 728213,
+      "etag": "94705b3c0746b11c51be74c1032453dc",
+      "sha256": "1efd4ee816bc3389d11a5338915e5bfa41021b0bd494fe339b260ed7f95e2122",
+      "acquiredAt": "2025-06-07T17:00:20.9Z",
+      "highQualityPixels": 0
+    }
+  ],
+  "retrievalComplete": true,
+  "sarContext": {
+    "frame": "142D_09148_131313",
+    "referenceDate": "2025-05-26",
+    "secondaryDate": "2025-06-07",
+    "type": "coherence-only",
+    "url": "https://dap.ceda.ac.uk/neodc/comet/data/licsar_products/142/142D_09148_131313/20250526_20250607/20250526_20250607.geo.cc.tif?download=1"
+  },
+  "limitations": [
+    "Comparaci\u00f3n exploratoria a escala de p\u00edxel GOES (~10 km), no por pol\u00edgono geot\u00e9cnico.",
+    "La mediana de 28 d\u00edas a la misma hora no es una climatolog\u00eda ni una atribuci\u00f3n volc\u00e1nica.",
+    "M\u00ednimo de 7 d\u00edas v\u00e1lidos y umbral de 2 \u00b0C son par\u00e1metros de investigaci\u00f3n, no calibrados.",
+    "Faltan desplazamiento LOS con referencia/QA, calibraci\u00f3n y validaci\u00f3n profesional; no se modifica el \u00edndice sint\u00e9tico.",
+    "Los d\u00edas sin medici\u00f3n v\u00e1lida interrumpen las rachas; no demuestran ausencia de calentamiento."
+  ],
+  "citation": "NOAA GOES-19 ABI-L2-LSTF, NOAA Open Data Dissemination. https://registry.opendata.aws/noaa-goes/ . El uso no implica respaldo de NOAA a UrkuSAR."
+}

@@ -6,11 +6,10 @@ import json
 from pathlib import Path
 import urllib.request
 
-import netCDF4
 import numpy as np
 import rasterio
 from rasterio.windows import from_bounds
-from rasterio.warp import transform, transform_bounds
+from goes import read_goes_pixels
 
 ROOT = Path(__file__).resolve().parent.parent
 BBOX = [-78.46, -0.74, -78.28, -0.57]
@@ -73,35 +72,10 @@ def coherence_summary(path):
 
 
 def thermal_summary(path):
-    with netCDF4.Dataset(path) as ds:
-        # CF standard_name is more robust than assuming a variable is named LST.
-        candidates = [v for v in ds.variables.values() if getattr(v, "standard_name", "") == "surface_temperature" and len(v.dimensions) == 2]
-        if len(candidates) != 1:
-            raise ValueError(f"Ambiguous LST variable; available variables: {list(ds.variables)}")
-        variable = candidates[0]
-        if variable.units != "K" or variable.dimensions != ("y", "x"):
-            raise ValueError("Expected land-surface temperature in Kelvin on a y/x grid")
-        projection = ds.variables[variable.grid_mapping]
-        height = float(projection.perspective_point_height)
-        proj = f"+proj=geos +h={height} +lon_0={projection.longitude_of_projection_origin} +a={projection.semi_major_axis} +b={projection.semi_minor_axis} +sweep={projection.sweep_angle_axis} +units=m"
-        left, bottom, right, top = transform_bounds("EPSG:4326", proj, *BBOX, densify_pts=21)
-        x = np.array(ds.variables["x"][:]) * height
-        y = np.array(ds.variables["y"][:]) * height
-        cols = np.where((x >= left) & (x <= right))[0]
-        rows = np.where((y >= bottom) & (y <= top))[0]
-        if not rows.size or not cols.size:
-            raise ValueError("No pixel centers intersect study extent")
-        window = (slice(int(rows.min()), int(rows.max()) + 1), slice(int(cols.min()), int(cols.max()) + 1))
-        lst = variable[window]
-        dqf = ds.variables["DQF"][window]
-        grid_x, grid_y = np.meshgrid(x[window[1]], y[window[0]])
-        lon, lat = transform(proj, "EPSG:4326", grid_x.ravel(), grid_y.ravel())
-        lon, lat = np.asarray(lon).reshape(lst.shape), np.asarray(lat).reshape(lst.shape)
-        inside = (lon >= BBOX[0]) & (lon <= BBOX[2]) & (lat >= BBOX[1]) & (lat <= BBOX[3])
-        valid = inside & (~np.ma.getmaskarray(lst)) & (~np.ma.getmaskarray(dqf)) & (np.asarray(dqf) == 0) & np.isfinite(np.asarray(lst))
-        samples = np.asarray(lst)[valid]
-        quality = ds.variables["DQF"]
-        return {"type": "land-surface-temperature", "variable": variable.name, "unit": variable.units, "timeStart": ds.time_coverage_start, "timeEnd": ds.time_coverage_end, "spatialResolution": getattr(ds, "spatial_resolution", "See provider metadata"), "sampleCount": int(inside.sum()), "highQualitySamples": int(samples.size), "dqfRule": "Pixel center in study bbox; DQF == 0, unmasked finite LST; no cloud filling", "dqfMeanings": quality.flag_meanings, "dqfValues": np.asarray(quality.flag_values).tolist(), "temperatureKMin": float(samples.min()) if samples.size else None, "temperatureKMax": float(samples.max()) if samples.size else None, "anomalyC": None, "baselineStatus": "not-established"}
+    data = read_goes_pixels(path, BBOX)
+    samples = [p["temperatureK"] for p in data["pixels"] if p["temperatureK"] is not None]
+    metadata = {key: data[key] for key in ["variable", "unit", "timeStart", "timeEnd", "spatialResolution", "dqfMeanings", "dqfValues"]}
+    return {"type": "land-surface-temperature", **metadata, "sampleCount": len(data["pixels"]), "highQualitySamples": len(samples), "dqfRule": "Pixel center in study bbox; DQF == 0, unmasked finite LST; no cloud filling", "temperatureKMin": min(samples) if samples else None, "temperatureKMax": max(samples) if samples else None, "anomalyC": None, "baselineStatus": "not-established"}
 
 
 def main():
